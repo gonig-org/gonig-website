@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 const quickLinks = [
   { label: "About Us", href: "/about" },
@@ -36,27 +37,27 @@ export default function Footer() {
     >
       <div
         style={{
-          paddingLeft: "72px",
-          paddingRight: "72px",
+          paddingLeft: "clamp(24px, 5vw, 72px)",
+          paddingRight: "clamp(24px, 5vw, 72px)",
           paddingTop: "96px",
           paddingBottom: "32px",
         }}
       >
         {/* Main content grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-12">
-
           {/* Left — Brand + Contact */}
           <div className="lg:col-span-5 flex flex-col gap-8">
-
             {/* Logo + Name */}
             <div className="flex items-center gap-4">
               <div
                 className="rounded-full overflow-hidden shrink-0"
                 style={{ width: "56px", height: "56px" }}
               >
-                <img
-                  src="/images/gonig-logo.png"
+                <Image
+                  src="/images/gonig-logo.webp"
                   alt="GONiG Logo"
+                  width={56}
+                  height={56}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -81,7 +82,8 @@ export default function Footer() {
                 letterSpacing: "-0.01em",
               }}
             >
-              Plot 5, block 6, Sitec, off Town Planning way,<br />
+              Plot 5, block 6, Sitec, off Town Planning way,
+              <br />
               Satellite Town, Lagos, Nigeria
             </p>
 
@@ -139,7 +141,6 @@ export default function Footer() {
 
           {/* Right — Quick Links, Social, Legal */}
           <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-10 lg:gap-16">
-
             {/* Quick Links */}
             <div className="flex flex-col gap-6">
               <span
@@ -234,7 +235,6 @@ export default function Footer() {
                 ))}
               </div>
             </div>
-
           </div>
         </div>
 

@@ -4,7 +4,7 @@ export default function Home() {
       <div
         style={{
           height: "100vh",
-          backgroundImage: "url('/images/hero-bg.jpg')",
+          backgroundImage: "url('/images/hero-bg.webp')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",

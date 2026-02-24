@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useRef } from "react";
 import { ChevronDown, Search, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -83,12 +84,12 @@ export default function Navbar() {
       </div>
 
       {/* 2. HEADER WRAPPER - pointer-events-none makes it "ghostly" so clicks pass through to TopBar */}
-      <header 
-        className="fixed left-0 w-full pointer-events-none" 
+      <header
+        className="fixed left-0 w-full pointer-events-none"
         style={{ top: "0", zIndex: 70 }}
       >
         <div className="hidden lg:block" style={{ height: "56px" }} />
-        
+
         {/* 3. NAV - pointer-events-auto restores clicking for the actual navbar */}
         <nav
           className="w-full flex items-center backdrop-blur-md relative pointer-events-auto"
@@ -116,9 +117,11 @@ export default function Navbar() {
               className="rounded-full overflow-hidden flex-shrink-0"
               style={{ width: "48px", height: "48px" }}
             >
-              <img
-                src="/images/gonig-logo.png"
+              <Image
+                src="/images/gonig-logo.webp"
                 alt="GONiG Logo"
+                width={72}
+                height={72}
                 className="w-full h-full object-cover"
               />
             </div>
@@ -146,7 +149,7 @@ export default function Navbar() {
 
           {/* 4. DESKTOP LOGO - top: -48px sits flush across the 56px TopBar and 64px Nav */}
           <div
-            className="hidden lg:flex absolute flex-col items-center gap-1 pointer-events-none" 
+            className="hidden lg:flex absolute flex-col items-center gap-1 pointer-events-none"
             style={{ top: "-48px", left: "72px", zIndex: 80 }}
           >
             <Link href="/" className="pointer-events-auto">
@@ -154,9 +157,11 @@ export default function Navbar() {
                 className="rounded-full overflow-hidden flex items-center justify-center flex-shrink-0"
                 style={{ width: "72px", height: "72px" }}
               >
-                <img
-                  src="/images/gonig-logo.png"
+                <Image
+                  src="/images/gonig-logo.webp"
                   alt="GONiG Logo"
+                  width={72}
+                  height={72}
                   className="w-full h-full object-cover"
                 />
               </div>
@@ -339,32 +344,115 @@ export default function Navbar() {
               style={{ backgroundColor: "#3D0C0C" }}
             >
               {/* Mobile Content (unchanged) */}
-              <div className="flex items-center justify-between" style={{ padding: "20px 32px", borderBottom: "1px solid rgba(255,249,236,0.1)" }}>
+              <div
+                className="flex items-center justify-between"
+                style={{
+                  padding: "20px 32px",
+                  borderBottom: "1px solid rgba(255,249,236,0.1)",
+                }}
+              >
                 <div className="flex items-center gap-3">
-                  <div className="rounded-full overflow-hidden flex-shrink-0" style={{ width: "40px", height: "40px" }}>
-                    <img src="/images/gonig-logo.png" alt="GONiG Logo" className="w-full h-full object-cover" />
+                  <div
+                    className="rounded-full overflow-hidden flex-shrink-0"
+                    style={{ width: "40px", height: "40px" }}
+                  >
+                    <Image
+                      src="/images/gonig-logo.webp"
+                      alt="GONiG Logo"
+                      width={72}
+                      height={72}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
-                  <span className="text-xs uppercase" style={{ fontFamily: "var(--font-playfair)", color: "var(--color-nav-text)", letterSpacing: "0.08em" }}>
+                  <span
+                    className="text-xs uppercase"
+                    style={{
+                      fontFamily: "var(--font-playfair)",
+                      color: "var(--color-nav-text)",
+                      letterSpacing: "0.08em",
+                    }}
+                  >
                     Guild of Organists of Nigeria
                   </span>
                 </div>
-                <button onClick={() => setMobileOpen(false)} style={{ color: "var(--color-nav-text)" }}><X size={22} /></button>
+                <button
+                  onClick={() => setMobileOpen(false)}
+                  style={{ color: "var(--color-nav-text)" }}
+                >
+                  <X size={22} />
+                </button>
               </div>
-              <div className="flex flex-col pt-6 pb-16" style={{ paddingLeft: "32px", paddingRight: "32px" }}>
+              <div
+                className="flex flex-col pt-6 pb-16"
+                style={{ paddingLeft: "32px", paddingRight: "32px" }}
+              >
                 {navItems.map((item) => (
                   <div key={item.label}>
-                    <button className="w-full flex items-center justify-between uppercase" style={{ fontFamily: "var(--font-montserrat)", color: "var(--color-nav-text)", fontSize: "16px", fontWeight: 600, letterSpacing: "-0.02em", paddingTop: "20px", paddingBottom: "20px" }} onClick={() => setOpenMobileSection(openMobileSection === item.label ? null : item.label)}>
+                    <button
+                      className="w-full flex items-center justify-between uppercase"
+                      style={{
+                        fontFamily: "var(--font-montserrat)",
+                        color: "var(--color-nav-text)",
+                        fontSize: "16px",
+                        fontWeight: 600,
+                        letterSpacing: "-0.02em",
+                        paddingTop: "20px",
+                        paddingBottom: "20px",
+                      }}
+                      onClick={() =>
+                        setOpenMobileSection(
+                          openMobileSection === item.label ? null : item.label,
+                        )
+                      }
+                    >
                       {item.label}
-                      <ChevronDown size={20} style={{ transition: "transform 0.3s ease", transform: openMobileSection === item.label ? "rotate(180deg)" : "rotate(0deg)", color: "var(--color-nav-text)", opacity: 0.5 }} />
+                      <ChevronDown
+                        size={20}
+                        style={{
+                          transition: "transform 0.3s ease",
+                          transform:
+                            openMobileSection === item.label
+                              ? "rotate(180deg)"
+                              : "rotate(0deg)",
+                          color: "var(--color-nav-text)",
+                          opacity: 0.5,
+                        }}
+                      />
                     </button>
                     <AnimatePresence>
                       {openMobileSection === item.label && (
-                        <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
-                          <div className="flex flex-col" style={{ paddingTop: "16px", paddingBottom: "8px" }}>
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          className="overflow-hidden"
+                        >
+                          <div
+                            className="flex flex-col"
+                            style={{ paddingTop: "16px", paddingBottom: "8px" }}
+                          >
                             {item.children.map((child) => (
-                              <Link key={child.label} href={child.href} className="flex items-center justify-between uppercase hover:opacity-60 transition-opacity" style={{ fontFamily: "var(--font-montserrat)", color: "var(--color-nav-text)", fontSize: "13px", paddingTop: "14px", paddingBottom: "14px" }} onClick={() => setMobileOpen(false)}>
+                              <Link
+                                key={child.label}
+                                href={child.href}
+                                className="flex items-center justify-between uppercase hover:opacity-60 transition-opacity"
+                                style={{
+                                  fontFamily: "var(--font-montserrat)",
+                                  color: "var(--color-nav-text)",
+                                  fontSize: "13px",
+                                  paddingTop: "14px",
+                                  paddingBottom: "14px",
+                                }}
+                                onClick={() => setMobileOpen(false)}
+                              >
                                 {child.label}
-                                <ChevronDown size={14} style={{ transform: "rotate(-90deg)", opacity: 0.4 }} />
+                                <ChevronDown
+                                  size={14}
+                                  style={{
+                                    transform: "rotate(-90deg)",
+                                    opacity: 0.4,
+                                  }}
+                                />
                               </Link>
                             ))}
                           </div>
