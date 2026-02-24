@@ -17,9 +17,10 @@
 
 html {
   scroll-behavior: smooth;
+  background-color: #230000;
 }
 
 body {
-  background-color: #000000;
+  background-color: #230000;
   color: var(--color-foreground);
 }

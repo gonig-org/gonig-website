@@ -1,6 +1,6 @@
 export default function Home() {
   return (
-    <div style={{ backgroundColor: "#000000" }}>
+    <div style={{ backgroundColor: "#230000" }}>
       {" "}
       <div
         style={{
