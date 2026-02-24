@@ -35,7 +35,6 @@ export default function Home() {
         >
           {/* Desktop layout */}
           <div className="hidden lg:flex items-center justify-between">
-
             {/* Left — Date, Headline, Button */}
             <div className="flex flex-col" style={{ maxWidth: "480px" }}>
               <div className="flex flex-col gap-8">
@@ -122,7 +121,6 @@ export default function Home() {
 
           {/* Mobile layout — stacked */}
           <div className="flex lg:hidden flex-col" style={{ gap: "24px" }}>
-
             {/* Date with line */}
             <div className="flex items-center gap-4">
               <div
@@ -201,6 +199,140 @@ export default function Home() {
           </div>
         </div>
       </div>
+      {/* CTA Section */}
+      <section
+        className="w-full relative"
+        style={{
+          backgroundColor: "#F7E5C2",
+          paddingTop: "clamp(64px, 8vw, 120px)",
+          paddingBottom: "clamp(64px, 8vw, 120px)",
+          paddingLeft: "clamp(24px, 5vw, 72px)",
+          paddingRight: "clamp(24px, 5vw, 72px)",
+        }}
+      >
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
+          {/* Left — Headline + Description */}
+          <div className="flex flex-col gap-8">
+            <div
+              style={{
+                width: "32px",
+                height: "2px",
+                backgroundColor: "#380101",
+                opacity: 0.4,
+              }}
+            />
+            <h2
+              style={{
+                fontFamily: "var(--font-playfair)",
+                color: "#1a0000",
+                fontSize: "clamp(28px, 3.5vw, 48px)",
+                fontWeight: 400,
+                lineHeight: 1.15,
+                letterSpacing: "-0.01em",
+              }}
+            >
+              Join the Guild
+            </h2>
+            <p
+              style={{
+                fontFamily: "var(--font-montserrat)",
+                color: "#1a0000",
+                fontSize: "clamp(13px, 1.2vw, 15px)",
+                lineHeight: 1.8,
+                letterSpacing: "-0.01em",
+                opacity: 0.65,
+                maxWidth: "480px",
+              }}
+            >
+              Become part of a distinguished community of organists dedicated to
+              preserving and advancing the sacred art of organ music across
+              Nigeria. Whether you are a seasoned performer, a student, or a
+              passionate enthusiast — there is a place for you here.
+            </p>
+          </div>
+
+          {/* Right — Email form */}
+          <div
+            className="flex flex-col gap-6"
+            style={{
+              backgroundColor: "rgba(255, 255, 255, 0.5)",
+              backdropFilter: "blur(8px)",
+              padding: "clamp(32px, 4vw, 56px)",
+              border: "1px solid rgba(56, 1, 1, 0.1)",
+            }}
+          >
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor="email"
+                className="uppercase"
+                style={{
+                  fontFamily: "var(--font-montserrat)",
+                  color: "#1a0000",
+                  fontSize: "11px",
+                  fontWeight: 600,
+                  letterSpacing: "0.1em",
+                  opacity: 0.5,
+                }}
+              >
+                Email Address
+              </label>
+              <input
+                id="email"
+                type="email"
+                placeholder="your@email.com"
+                style={{
+                  fontFamily: "var(--font-montserrat)",
+                  color: "#1a0000",
+                  fontSize: "14px",
+                  letterSpacing: "-0.01em",
+                  padding: "16px 0",
+                  border: "none",
+                  borderBottom: "1px solid rgba(56, 1, 1, 0.2)",
+                  backgroundColor: "transparent",
+                  outline: "none",
+                  width: "100%",
+                }}
+              />
+            </div>
+
+            <p
+              style={{
+                fontFamily: "var(--font-montserrat)",
+                color: "#1a0000",
+                fontSize: "12px",
+                opacity: 0.4,
+                letterSpacing: "-0.01em",
+                lineHeight: 1.6,
+              }}
+            >
+              Submit your email and our membership team will reach out to you
+              with next steps.
+            </p>
+
+            <button
+              className="flex items-center justify-between gap-4 hover:opacity-80 transition-opacity"
+              style={{
+                backgroundColor: "#380101",
+                color: "#F7E5C2",
+                fontFamily: "var(--font-montserrat)",
+                fontSize: "12px",
+                fontWeight: 600,
+                letterSpacing: "0.12em",
+                paddingTop: "20px",
+                paddingBottom: "20px",
+                paddingLeft: "28px",
+                paddingRight: "28px",
+                textTransform: "uppercase",
+                width: "100%",
+                marginTop: "8px",
+              }}
+            >
+              Register Interest
+              <span style={{ fontSize: "10px" }}>&#9658;</span>
+            </button>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

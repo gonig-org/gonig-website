@@ -57,9 +57,7 @@ const topBarLinks = [
 export default function Navbar() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [openMobileSection, setOpenMobileSection] = useState<string | null>(
-    null,
-  );
+  const [openMobileSection, setOpenMobileSection] = useState<string | null>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleMouseEnter = (label: string) => {
@@ -72,6 +70,7 @@ export default function Navbar() {
       setOpenDropdown(null);
     }, 100);
   };
+
   useEffect(() => {
     if (mobileOpen) {
       document.body.style.overflow = "hidden";
@@ -82,9 +81,20 @@ export default function Navbar() {
       document.body.style.overflow = "";
     };
   }, [mobileOpen]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024) {
+        setMobileOpen(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <>
-      {/* 1. TOP BAR - Remains at 60 */}
+      {/* 1. TOP BAR */}
       <div
         className="hidden lg:block fixed top-0 left-0 w-full"
         style={{ zIndex: 60 }}
@@ -92,14 +102,14 @@ export default function Navbar() {
         <TopBar />
       </div>
 
-      {/* 2. HEADER WRAPPER - pointer-events-none makes it "ghostly" so clicks pass through to TopBar */}
+      {/* 2. HEADER WRAPPER */}
       <header
         className="fixed left-0 w-full pointer-events-none"
         style={{ top: "0", zIndex: 70 }}
       >
         <div className="hidden lg:block" style={{ height: "56px" }} />
 
-        {/* 3. NAV - pointer-events-auto restores clicking for the actual navbar */}
+        {/* 3. NAV */}
         <nav
           className="w-full flex items-center backdrop-blur-md relative pointer-events-auto"
           style={{
@@ -156,7 +166,7 @@ export default function Navbar() {
             </button>
           </div>
 
-          {/* 4. DESKTOP LOGO - top: -48px sits flush across the 56px TopBar and 64px Nav */}
+          {/* 4. DESKTOP LOGO */}
           <div
             className="hidden lg:flex absolute flex-col items-center gap-1 pointer-events-none"
             style={{ top: "-48px", left: "72px", zIndex: 80 }}
@@ -247,7 +257,7 @@ export default function Navbar() {
         onMouseEnter={() => openDropdown && handleMouseEnter(openDropdown)}
       />
 
-      {/* Mega menu - restored pointer-events-auto via motion.div */}
+      {/* Mega menu */}
       <AnimatePresence>
         {openDropdown && (
           <motion.div
@@ -333,7 +343,7 @@ export default function Navbar() {
         )}
       </AnimatePresence>
 
-      {/* Mobile Menu - Remains high z-index and auto-pointer-events */}
+      {/* Mobile Menu */}
       <AnimatePresence>
         {mobileOpen && (
           <>
@@ -346,17 +356,18 @@ export default function Navbar() {
               style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
               onClick={() => setMobileOpen(false)}
             />
+            {/* Panel — flex column, NO overflow on the outer div */}
             <motion.div
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
-              className="lg:hidden fixed top-0 left-0 h-full w-full z-[110] overflow-y-auto"
+              className="lg:hidden fixed top-0 left-0 h-full w-full z-[110] flex flex-col"
               style={{ backgroundColor: "#3D0C0C" }}
             >
-              {/* Mobile Content (unchanged) */}
+              {/* Fixed header — never scrolls */}
               <div
-                className="flex items-center justify-between"
+                className="flex-shrink-0 flex items-center justify-between"
                 style={{
                   padding: "20px 32px",
                   borderBottom: "1px solid rgba(255,249,236,0.1)",
@@ -393,9 +404,17 @@ export default function Navbar() {
                   <X size={22} />
                 </button>
               </div>
+
+              {/* Scrollable content area — only this part scrolls */}
               <div
-                className="flex flex-col pt-6 pb-16"
-                style={{ paddingLeft: "32px", paddingRight: "32px" }}
+                className="flex-1 overflow-y-auto"
+                style={{
+                  paddingLeft: "32px",
+                  paddingRight: "32px",
+                  paddingTop: "24px",
+                  paddingBottom: "48px",
+                  overscrollBehavior: "none",
+                }}
               >
                 {navItems.map((item) => (
                   <div key={item.label}>
@@ -472,6 +491,37 @@ export default function Navbar() {
                     </AnimatePresence>
                   </div>
                 ))}
+
+                {/* Top bar links — secondary hierarchy */}
+                <div
+                  className="flex flex-col"
+                  style={{
+                    marginTop: "40px",
+                    paddingTop: "24px",
+                    borderTop: "1px solid rgba(255,249,236,0.08)",
+                  }}
+                >
+                  {topBarLinks.map((link) => (
+                    <Link
+                      key={link.label}
+                      href={link.href}
+                      className="uppercase hover:opacity-60 transition-opacity"
+                      style={{
+                        fontFamily: "var(--font-montserrat)",
+                        color: "var(--color-nav-text)",
+                        fontSize: "14px",
+                        fontWeight: 400,
+                        opacity: 0.6,
+                        letterSpacing: "0.08em",
+                        paddingTop: "14px",
+                        paddingBottom: "14px",
+                      }}
+                      onClick={() => setMobileOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
               </div>
             </motion.div>
           </>

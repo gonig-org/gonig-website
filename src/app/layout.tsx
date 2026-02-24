@@ -22,6 +22,9 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   title: "Guild of Organists Nigeria | GONiG",
   description: "The collective voice of organists across Nigeria.",
+};
+
+export const viewport = {
   themeColor: "#3D0C0C",
 };
 export default function RootLayout({
