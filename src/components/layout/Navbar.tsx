@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { ChevronDown, Search, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import TopBar from "./TopBar";
@@ -72,7 +72,16 @@ export default function Navbar() {
       setOpenDropdown(null);
     }, 100);
   };
-
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
   return (
     <>
       {/* 1. TOP BAR - Remains at 60 */}
