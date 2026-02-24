@@ -332,6 +332,7 @@ export default function Navbar() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
               className="lg:hidden fixed inset-0 z-[100]"
               style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
               onClick={() => setMobileOpen(false)}
@@ -340,6 +341,7 @@ export default function Navbar() {
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
+              transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
               className="lg:hidden fixed top-0 left-0 h-full w-full z-[110] overflow-y-auto"
               style={{ backgroundColor: "#3D0C0C" }}
             >
