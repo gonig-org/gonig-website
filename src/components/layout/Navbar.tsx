@@ -246,7 +246,7 @@ export default function Navbar() {
             initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
+            transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
             className="hidden lg:block fixed left-0 w-full backdrop-blur-md pointer-events-auto"
             style={{
               top: "120px",
