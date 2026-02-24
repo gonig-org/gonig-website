@@ -17,7 +17,7 @@ const socialLinks = [
 export default function TopBar() {
   return (
     <div
-      className="w-full flex items-center justify-end gap-8 text-sm"
+      className="w-full flex items-center justify-end gap-8 text-sm relative z-50"
       style={{
         backgroundColor: "var(--color-topbar)",
         color: "var(--color-nav-text)",
@@ -32,14 +32,22 @@ export default function TopBar() {
             key={link.label}
             href={link.href}
             className="hover:underline underline-offset-2 transition-opacity hover:opacity-80 uppercase"
-            style={{ color: "var(--color-nav-text)", fontFamily: "var(--font-inter)", letterSpacing: "-0.02em", fontSize: "12px" }}
+            style={{
+              color: "var(--color-nav-text)",
+              fontFamily: "var(--font-montserrat)",
+              letterSpacing: "-0.02em",
+              fontSize: "12px",
+            }}
           >
             {link.label}
           </Link>
         ))}
       </div>
 
-      <div className="w-px h-4" style={{ backgroundColor: "var(--color-nav-text)", opacity: 0.4 }} />
+      <div
+        className="w-px h-4"
+        style={{ backgroundColor: "var(--color-nav-text)", opacity: 0.4 }}
+      />
 
       <div className="flex items-center gap-8">
         {socialLinks.map((social) => {
