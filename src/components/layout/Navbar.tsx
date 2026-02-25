@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { ChevronDown, Search, Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import TopBar from "./TopBar";
@@ -12,37 +13,41 @@ const navItems = [
     label: "About Us",
     href: "/about",
     children: [
-      { label: "History", href: "/about/history" },
-      { label: "Vision & Mission", href: "/about/mission" },
+      { label: "Overview", href: "/about" },
+      { label: "Governance", href: "/about/governance" },
       { label: "Leadership", href: "/about/leadership" },
-      { label: "Patrons", href: "/about/patrons" },
+      { label: "Partners", href: "/about/partners" },
     ],
   },
   {
     label: "Membership",
     href: "/membership",
     children: [
+      { label: "Why Join", href: "/membership/why-join" },
+      { label: "Categories", href: "/membership/categories" },
       { label: "Benefits", href: "/membership/benefits" },
-      { label: "How to Join", href: "/membership/join" },
-      { label: "Member Directory", href: "/membership/directory" },
+      { label: "Apply", href: "/membership/apply" },
+      { label: "Renew", href: "/membership/renew" },
     ],
   },
   {
     label: "Education",
     href: "/education",
     children: [
-      { label: "Courses", href: "/education/courses" },
-      { label: "Workshops", href: "/education/workshops" },
-      { label: "Scholarships", href: "/education/scholarships" },
-      { label: "Exams", href: "/education/exams" },
+      { label: "Programmes", href: "/education/programmes" },
+      { label: "Mentorship", href: "/education/mentorship" },
+      { label: "Study Resources", href: "/education/resources" },
     ],
   },
   {
     label: "Events",
     href: "/events",
     children: [
-      { label: "Upcoming Events", href: "/events/upcoming" },
-      { label: "Past Events", href: "/events/past" },
+      { label: "Conference", href: "/events/conference" },
+      { label: "Workshops", href: "/events/workshops" },
+      { label: "Competitions", href: "/events/competitions" },
+      { label: "Performances", href: "/events/performances" },
+      { label: "Calendar", href: "/events/calendar" },
     ],
   },
 ];
@@ -57,7 +62,10 @@ const topBarLinks = [
 export default function Navbar() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [openMobileSection, setOpenMobileSection] = useState<string | null>(null);
+  const [openMobileSection, setOpenMobileSection] = useState<string | null>(
+    null,
+  );
+  const pathname = usePathname();
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleMouseEnter = (label: string) => {
@@ -82,7 +90,7 @@ export default function Navbar() {
     };
   }, [mobileOpen]);
 
-  useEffect(() => {
+useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 1024) {
         setMobileOpen(false);
@@ -91,6 +99,14 @@ export default function Navbar() {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+useEffect(() => {
+    const t = setTimeout(() => {
+      setOpenDropdown(null);
+      setMobileOpen(false);
+    }, 0);
+    return () => clearTimeout(t);
+  }, [pathname]);
 
   return (
     <>
@@ -295,7 +311,7 @@ export default function Navbar() {
                   style={{
                     color: "var(--color-nav-text)",
                     opacity: 0.5,
-                    fontSize: "32px",
+                    fontSize: "56px",
                     fontWeight: 200,
                   }}
                 >
