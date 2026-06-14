@@ -1,17 +1,19 @@
 import Link from "next/link";
 import { Youtube, Twitter, Facebook } from "lucide-react";
+import { TOP_BAR_LINKS } from "@/lib/constants";
 
-const topLinks = [
-  { label: "Resources", href: "/resources" },
-  { label: "News", href: "/news" },
-  { label: "Media", href: "/media" },
-  { label: "Contact", href: "/contact" },
-];
+/**
+ * Utility bar pinned above the main Navbar (desktop only).
+ *
+ * Contains secondary navigation links (Resources, News, Media, Contact)
+ * and social media icons. Hidden on mobile — those links surface inside
+ * the mobile slide-out menu instead (see Navbar.tsx).
+ */
 
 const socialLinks = [
-  { icon: Youtube, href: "https://youtube.com", label: "YouTube" },
+  { icon: Youtube, href: "https://www.youtube.com/@guildoforganistsofnigeria2014", label: "YouTube" },
   { icon: Twitter, href: "https://twitter.com", label: "X (Twitter)" },
-  { icon: Facebook, href: "https://facebook.com", label: "Facebook" },
+  { icon: Facebook, href: "https://www.facebook.com/Guildoforganistsofnigeria", label: "Facebook" },
 ];
 
 export default function TopBar() {
@@ -26,17 +28,17 @@ export default function TopBar() {
         paddingRight: "72px",
       }}
     >
+      {/* Secondary nav links */}
       <div className="flex items-center gap-8">
-        {topLinks.map((link) => (
+        {TOP_BAR_LINKS.map((link) => (
           <Link
             key={link.label}
             href={link.href}
-            className="hover:underline underline-offset-2 transition-opacity hover:opacity-80 uppercase"
+            className="font-nav hover:underline underline-offset-2 transition-opacity hover:opacity-80"
             style={{
               color: "var(--color-nav-text)",
-              fontFamily: "var(--font-montserrat)",
-              letterSpacing: "-0.02em",
               fontSize: "12px",
+              letterSpacing: "-0.02em",
             }}
           >
             {link.label}
@@ -44,11 +46,13 @@ export default function TopBar() {
         ))}
       </div>
 
+      {/* Divider between links and socials */}
       <div
         className="w-px h-4"
         style={{ backgroundColor: "var(--color-nav-text)", opacity: 0.4 }}
       />
 
+      {/* Social media icons */}
       <div className="flex items-center gap-8">
         {socialLinks.map((social) => {
           const Icon = social.icon;

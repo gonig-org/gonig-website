@@ -2,27 +2,35 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { Youtube, Twitter, Facebook } from "lucide-react";
+import {
+  QUICK_LINKS,
+  LEGAL_LINKS,
+  CONTACT_EMAIL,
+  CONTACT_PHONE,
+  CONTACT_ADDRESS,
+} from "@/lib/constants";
 
-const quickLinks = [
-  { label: "About Us", href: "/about" },
-  { label: "News", href: "/news" },
-  { label: "Membership", href: "/membership" },
-  { label: "Education", href: "/education" },
-  { label: "Shop", href: "/shop" },
-  { label: "Contribute", href: "/support" },
-  { label: "Blog", href: "/blog" },
-];
+/**
+ * Site-wide footer — Masthead layout.
+ *
+ * Structure (top to bottom):
+ *   ─────────────────── thin rule ───────────────────
+ *   Guild of Organists of Nigeria          (masthead)
+ *   ─────────────────── thin rule ───────────────────
+ *
+ *   Contact info  │  Quick Links  │  Legal + Socials
+ *
+ *   ─────────────────── thin rule ───────────────────
+ *   © GONiG                              Back to Top ↑
+ *
+ * "use client" is required for the scrollToTop click handler.
+ */
 
 const socialLinks = [
-  { label: "Facebook", href: "https://facebook.com" },
-  { label: "Twitter/X", href: "https://twitter.com" },
-  { label: "Youtube", href: "https://youtube.com" },
-];
-
-const legalLinks = [
-  { label: "Terms Of Service", href: "/terms" },
-  { label: "Privacy Policy", href: "/privacy" },
-  { label: "Cookie Policy", href: "/cookies" },
+  { icon: Youtube, href: "https://www.youtube.com/@guildoforganistsofnigeria2014", label: "YouTube" },
+  { icon: Twitter, href: "https://twitter.com", label: "X (Twitter)" },
+  { icon: Facebook, href: "https://www.facebook.com/Guildoforganistsofnigeria", label: "Facebook" },
 ];
 
 export default function Footer() {
@@ -31,228 +39,207 @@ export default function Footer() {
   return (
     <footer
       style={{
-        backgroundColor: "#230000",
+        backgroundColor: "var(--color-body-bg)",
         color: "var(--color-nav-text)",
       }}
     >
       <div
         style={{
-          paddingLeft: "clamp(24px, 5vw, 72px)",
-          paddingRight: "clamp(24px, 5vw, 72px)",
-          paddingTop: "96px",
-          paddingBottom: "32px",
+          paddingLeft: "var(--space-section-x)",
+          paddingRight: "var(--space-section-x)",
         }}
       >
-        {/* Main content grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-12">
-          {/* Left — Brand + Contact */}
-          <div className="lg:col-span-5 flex flex-col gap-8">
-            {/* Logo + Name */}
-            <div className="flex items-center gap-4">
-              <div
-                className="rounded-full overflow-hidden shrink-0"
-                style={{ width: "56px", height: "56px" }}
-              >
-                <Image
-                  src="/images/gonig-logo.webp"
-                  alt="GONiG Logo"
-                  width={56}
-                  height={56}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <span
-                className="text-xl"
-                style={{
-                  fontFamily: "var(--font-playfair)",
-                  color: "var(--color-nav-text)",
-                }}
-              >
-                GONig
-              </span>
-            </div>
+        {/* ── Top rule ── */}
+        <div
+          style={{
+            height: "1px",
+            backgroundColor: "rgba(255,249,236,0.1)",
+          }}
+        />
 
-            {/* Address */}
-            <p
-              className="text-sm leading-relaxed"
+        {/* ── Masthead row — logo left, name right ── */}
+        <div
+          className="flex items-center gap-6 flex-wrap"
+          style={{ paddingTop: "40px", paddingBottom: "32px" }}
+        >
+          {/* Logo — large, anchors the left of the masthead */}
+          <div
+            className="rounded-full overflow-hidden shrink-0"
+            style={{ width: "80px", height: "80px" }}
+          >
+            <Image
+              src="/images/gonig-logo.webp"
+              alt="GONiG Logo"
+              width={80}
+              height={80}
+              className="w-full h-full object-cover"
+            />
+          </div>
+
+          <h2
+            className="font-heading"
+            style={{
+              color: "var(--color-nav-text)",
+              fontSize: "clamp(20px, 3.5vw, 44px)",
+              letterSpacing: "-0.02em",
+            }}
+          >
+            Guild of Organists of Nigeria
+          </h2>
+        </div>
+
+        {/* ── Rule beneath masthead ── */}
+        <div
+          style={{
+            height: "1px",
+            backgroundColor: "rgba(255,249,236,0.1)",
+            marginBottom: "clamp(40px, 6vw, 72px)",
+          }}
+        />
+
+        {/* ── Three-column grid ── */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
+          {/* Col 1 — Contact information */}
+          <div className="flex flex-col gap-6">
+            <span
+              className="font-label"
               style={{
-                fontFamily: "var(--font-montserrat)",
                 color: "var(--color-nav-text)",
-                opacity: 0.75,
-                letterSpacing: "-0.01em",
+                opacity: 0.4,
+                fontSize: "10px",
+                letterSpacing: "0.15em",
               }}
             >
-              Plot 5, block 6, Sitec, off Town Planning way,
+              Contact
+            </span>
+
+            <p
+              className="font-body text-sm leading-relaxed"
+              style={{ color: "var(--color-nav-text)", opacity: 0.6 }}
+            >
+              {CONTACT_ADDRESS.line1}
               <br />
-              Satellite Town, Lagos, Nigeria
+              {CONTACT_ADDRESS.line2}
             </p>
 
-            {/* Telephone + Email */}
-            <div className="flex gap-16">
-              <div className="flex flex-col gap-2">
-                <span
-                  className="text-xs"
-                  style={{
-                    fontFamily: "var(--font-montserrat)",
-                    color: "var(--color-nav-text)",
-                    opacity: 0.5,
-                    letterSpacing: "-0.01em",
-                  }}
-                >
-                  Telephone:
-                </span>
-                <span
-                  className="text-sm font-medium"
-                  style={{
-                    fontFamily: "var(--font-montserrat)",
-                    color: "var(--color-nav-text)",
-                    letterSpacing: "-0.02em",
-                  }}
-                >
-                  +2348062346580
-                </span>
-              </div>
-              <div className="flex flex-col gap-2">
-                <span
-                  className="text-xs"
-                  style={{
-                    fontFamily: "var(--font-montserrat)",
-                    color: "var(--color-nav-text)",
-                    opacity: 0.5,
-                    letterSpacing: "-0.01em",
-                  }}
-                >
-                  Email:
-                </span>
-                <a
-                  href="mailto:gonig@gmail.com"
-                  className="text-sm font-medium hover:opacity-70 transition-opacity"
-                  style={{
-                    fontFamily: "var(--font-montserrat)",
-                    color: "var(--color-nav-text)",
-                    letterSpacing: "-0.02em",
-                  }}
-                >
-                  gonig@gmail.com
-                </a>
-              </div>
+            <div className="flex flex-col gap-3">
+              <a
+                href={`tel:${CONTACT_PHONE}`}
+                className="font-body text-sm hover:opacity-70 transition-opacity"
+                style={{ color: "var(--color-nav-text)", opacity: 0.85 }}
+              >
+                {CONTACT_PHONE}
+              </a>
+              <a
+                href={`mailto:${CONTACT_EMAIL}`}
+                className="font-body text-sm hover:opacity-70 transition-opacity"
+                style={{ color: "var(--color-nav-text)", opacity: 0.85 }}
+              >
+                {CONTACT_EMAIL}
+              </a>
             </div>
           </div>
 
-          {/* Right — Quick Links, Social, Legal */}
-          <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-10 lg:gap-16">
-            {/* Quick Links */}
-            <div className="flex flex-col gap-6">
-              <span
-                className="text-sm"
-                style={{
-                  fontFamily: "var(--font-montserrat)",
-                  color: "var(--color-nav-text)",
-                  opacity: 0.5,
-                  letterSpacing: "-0.01em",
-                }}
-              >
-                Quick Links
-              </span>
-              <div className="flex flex-col gap-4">
-                {quickLinks.map((link) => (
-                  <Link
-                    key={link.label}
-                    href={link.href}
-                    className="text-sm hover:opacity-60 transition-opacity"
-                    style={{
-                      fontFamily: "var(--font-montserrat)",
-                      color: "var(--color-nav-text)",
-                      letterSpacing: "-0.01em",
-                    }}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
+          {/* Col 2 — Quick links */}
+          <div className="flex flex-col gap-6">
+            <span
+              className="font-label"
+              style={{
+                color: "var(--color-nav-text)",
+                opacity: 0.4,
+                fontSize: "10px",
+                letterSpacing: "0.15em",
+              }}
+            >
+              Quick Links
+            </span>
+
+            <div className="grid grid-cols-2 gap-x-8 gap-y-3">
+              {QUICK_LINKS.map((link) => (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="font-body text-sm hover:opacity-60 transition-opacity"
+                  style={{ color: "var(--color-nav-text)", opacity: 0.75 }}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div>
+          </div>
+
+          {/* Col 3 — Legal links + social icons */}
+          <div className="flex flex-col gap-6">
+            <span
+              className="font-label"
+              style={{
+                color: "var(--color-nav-text)",
+                opacity: 0.4,
+                fontSize: "10px",
+                letterSpacing: "0.15em",
+              }}
+            >
+              Legal
+            </span>
+
+            <div className="flex flex-col gap-3">
+              {LEGAL_LINKS.map((link) => (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="font-body text-sm hover:opacity-60 transition-opacity"
+                  style={{ color: "var(--color-nav-text)", opacity: 0.75 }}
+                >
+                  {link.label}
+                </Link>
+              ))}
             </div>
 
-            {/* Social */}
-            <div className="flex flex-col gap-6">
-              <span
-                className="text-sm"
-                style={{
-                  fontFamily: "var(--font-montserrat)",
-                  color: "var(--color-nav-text)",
-                  opacity: 0.5,
-                  letterSpacing: "-0.01em",
-                }}
-              >
-                Social
-              </span>
-              <div className="flex flex-col gap-4">
-                {socialLinks.map((link) => (
+            {/* Social icons as proper icon buttons */}
+            <div
+              className="flex items-center gap-5"
+              style={{ marginTop: "8px" }}
+            >
+              {socialLinks.map((social) => {
+                const Icon = social.icon;
+                return (
                   <a
-                    key={link.label}
-                    href={link.href}
+                    key={social.label}
+                    href={social.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm hover:opacity-60 transition-opacity"
+                    aria-label={social.label}
+                    className="flex items-center justify-center hover:opacity-70 transition-opacity"
                     style={{
-                      fontFamily: "var(--font-montserrat)",
+                      width: "36px",
+                      height: "36px",
+                      border: "1px solid rgba(255,249,236,0.2)",
                       color: "var(--color-nav-text)",
-                      letterSpacing: "-0.01em",
                     }}
                   >
-                    {link.label}
+                    <Icon size={15} />
                   </a>
-                ))}
-              </div>
-            </div>
-
-            {/* Legal */}
-            <div className="flex flex-col gap-6 col-span-2 sm:col-span-1">
-              <span
-                className="text-sm"
-                style={{
-                  fontFamily: "var(--font-montserrat)",
-                  color: "var(--color-nav-text)",
-                  opacity: 0.5,
-                  letterSpacing: "-0.01em",
-                }}
-              >
-                Legal
-              </span>
-              <div className="flex flex-col gap-4">
-                {legalLinks.map((link) => (
-                  <Link
-                    key={link.label}
-                    href={link.href}
-                    className="text-sm hover:opacity-60 transition-opacity"
-                    style={{
-                      fontFamily: "var(--font-montserrat)",
-                      color: "var(--color-nav-text)",
-                      letterSpacing: "-0.01em",
-                    }}
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </div>
+                );
+              })}
             </div>
           </div>
         </div>
 
-        {/* Back to top + copyright */}
+        {/* ── Bottom bar: copyright + back to top ── */}
         <div
           className="flex items-center justify-between"
-          style={{ marginTop: "120px" }}
+          style={{
+            marginTop: "clamp(48px, 6vw, 80px)",
+            paddingTop: "24px",
+            paddingBottom: "32px",
+            borderTop: "1px solid rgba(255,249,236,0.08)",
+          }}
         >
           <p
-            className="text-xs"
-            style={{
-              fontFamily: "var(--font-montserrat)",
-              color: "var(--color-nav-text)",
-              opacity: 0.4,
-              letterSpacing: "-0.01em",
-            }}
+            className="font-body text-xs"
+            style={{ color: "var(--color-nav-text)", opacity: 0.35 }}
           >
-            © 2023 GONig. All rights reserved
+            &copy; {new Date().getFullYear()} GONiG. All rights reserved.
           </p>
 
           <button
@@ -261,23 +248,20 @@ export default function Footer() {
             style={{
               color: "var(--color-nav-text)",
               fontFamily: "var(--font-montserrat)",
-              fontSize: "13px",
-              letterSpacing: "-0.01em",
+              fontSize: "12px",
+              letterSpacing: "0.08em",
             }}
           >
             Back to Top
             <div
+              className="flex items-center justify-center"
               style={{
-                width: "40px",
-                height: "40px",
-                border: "1px solid rgba(255,249,236,0.3)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                lineHeight: "1",
+                width: "36px",
+                height: "36px",
+                border: "1px solid rgba(255,249,236,0.25)",
               }}
             >
-              <span style={{ fontSize: "18px", marginTop: "-2px" }}>↑</span>
+              <span style={{ fontSize: "16px", marginTop: "-2px" }}>↑</span>
             </div>
           </button>
         </div>

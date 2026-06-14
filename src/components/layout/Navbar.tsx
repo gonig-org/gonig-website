@@ -5,66 +5,32 @@ import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { ChevronDown, Search, Menu, X } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import TopBar from "./TopBar";
+import { NAV_ITEMS, TOP_BAR_LINKS, SITE_NAME } from "@/lib/constants";
 
-const navItems = [
-  {
-    label: "About Us",
-    href: "/about",
-    children: [
-      { label: "Overview", href: "/about" },
-      { label: "Governance", href: "/about/governance" },
-      { label: "Leadership", href: "/about/leadership" },
-      { label: "Partners", href: "/about/partners" },
-    ],
-  },
-  {
-    label: "Membership",
-    href: "/membership",
-    children: [
-      { label: "Why Join", href: "/membership/why-join" },
-      { label: "Categories", href: "/membership/categories" },
-      { label: "Benefits", href: "/membership/benefits" },
-      { label: "Apply", href: "/membership/apply" },
-      { label: "Renew", href: "/membership/renew" },
-    ],
-  },
-  {
-    label: "Education",
-    href: "/education",
-    children: [
-      { label: "Programmes", href: "/education/programmes" },
-      { label: "Mentorship", href: "/education/mentorship" },
-      { label: "Study Resources", href: "/education/resources" },
-    ],
-  },
-  {
-    label: "Events",
-    href: "/events",
-    children: [
-      { label: "Conference", href: "/events/conference" },
-      { label: "Workshops", href: "/events/workshops" },
-      { label: "Competitions", href: "/events/competitions" },
-      { label: "Performances", href: "/events/performances" },
-      { label: "Calendar", href: "/events/calendar" },
-    ],
-  },
-];
-
-const topBarLinks = [
-  { label: "Resources", href: "/resources" },
-  { label: "News", href: "/news" },
-  { label: "Media", href: "/media" },
-  { label: "Contact", href: "/contact" },
-];
+/**
+ * Main site navigation — fixed to the top of the viewport.
+ *
+ * Structure (desktop):
+ *   ┌─────────────── TopBar (56px) ───────────────┐
+ *   ├── Logo ──── Nav links ──── Search ──────────┤  ← Navbar (64px), solid bg
+ *   └── Simple dropdown on hover ────────────────┘
+ *
+ * Structure (mobile):
+ *   ┌── Hamburger ──── Logo ──── Search ──────────┤
+ *   └── Full-screen slide-out panel ──────────────┘
+ *
+ * Design decisions:
+ *   - Solid background (no frosted glass) — institutions don't blur
+ *   - Simple per-item dropdowns (not a mega menu) — clean, legible, precise
+ *   - Chevron is a static indicator only — no rotation animation
+ */
 
 export default function Navbar() {
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [openMobileSection, setOpenMobileSection] = useState<string | null>(
-    null,
-  );
+  const [openMobileSection, setOpenMobileSection] = useState<string | null>(null);
   const pathname = usePathname();
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -74,69 +40,62 @@ export default function Navbar() {
   };
 
   const handleMouseLeave = () => {
-    closeTimer.current = setTimeout(() => {
-      setOpenDropdown(null);
-    }, 100);
+    // Short delay so users can move cursor from trigger into the dropdown
+    closeTimer.current = setTimeout(() => setOpenDropdown(null), 120);
   };
 
+  // Lock body scroll while mobile menu is open
   useEffect(() => {
-    if (mobileOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
   }, [mobileOpen]);
 
-useEffect(() => {
+  // Auto-close mobile menu when viewport grows past lg breakpoint
+  useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth >= 1024) {
-        setMobileOpen(false);
-      }
+      if (window.innerWidth >= 1024) setMobileOpen(false);
     };
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-useEffect(() => {
-    const t = setTimeout(() => {
-      setOpenDropdown(null);
-      setMobileOpen(false);
-    }, 0);
-    return () => clearTimeout(t);
+  // Close everything on route change
+  useEffect(() => {
+    setOpenDropdown(null);
+    setMobileOpen(false);
   }, [pathname]);
 
   return (
     <>
-      {/* 1. TOP BAR */}
-      <div
-        className="hidden lg:block fixed top-0 left-0 w-full"
-        style={{ zIndex: 60 }}
-      >
+      {/* ── TopBar (desktop only) ── */}
+      <div className="hidden lg:block fixed top-0 left-0 w-full" style={{ zIndex: 60 }}>
         <TopBar />
       </div>
 
-      {/* 2. HEADER WRAPPER */}
+      {/* ── Header ── */}
       <header
         className="fixed left-0 w-full pointer-events-none"
-        style={{ top: "0", zIndex: 70 }}
+        style={{ top: 0, zIndex: 70 }}
       >
+        {/* Spacer equal to TopBar height so nav sits flush below it on desktop */}
         <div className="hidden lg:block" style={{ height: "56px" }} />
 
-        {/* 3. NAV */}
         <nav
-          className="w-full flex items-center backdrop-blur-md relative pointer-events-auto"
+          className="w-full flex items-center relative pointer-events-auto"
           style={{
-            backgroundColor: "rgba(56, 1, 1, 0.4)",
+            /*
+             * Solid background — not frosted glass.
+             * Institutions don't blur; a solid bar reads with more authority
+             * and is easier to read for older users (no bleed-through content).
+             */
+            backgroundColor: "var(--color-navbar)",
             color: "var(--color-nav-text)",
             height: "64px",
             paddingLeft: "24px",
             paddingRight: "24px",
           }}
         >
-          {/* Hamburger — mobile only */}
+          {/* Mobile: hamburger */}
           <button
             className="lg:hidden flex items-center justify-center"
             aria-label="Toggle menu"
@@ -146,293 +105,176 @@ useEffect(() => {
             {mobileOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
 
-          {/* Mobile Logo Group */}
+          {/* Mobile: centred logo + name */}
           <div className="lg:hidden absolute left-1/2 -translate-x-1/2 flex items-center gap-3">
-            <div
-              className="rounded-full overflow-hidden flex-shrink-0"
-              style={{ width: "48px", height: "48px" }}
-            >
-              <Image
-                src="/images/gonig-logo.webp"
-                alt="GONiG Logo"
-                width={72}
-                height={72}
-                className="w-full h-full object-cover"
-              />
+            <div className="rounded-full overflow-hidden flex-shrink-0" style={{ width: "44px", height: "44px" }}>
+              <Image src="/images/gonig-logo.webp" alt="GONiG Logo" width={72} height={72} className="w-full h-full object-cover" />
             </div>
             <span
               className="text-xs uppercase leading-tight whitespace-nowrap"
-              style={{
-                fontFamily: "var(--font-playfair)",
-                color: "var(--color-nav-text)",
-                letterSpacing: "0.08em",
-              }}
+              style={{ fontFamily: "var(--font-playfair)", color: "var(--color-nav-text)", letterSpacing: "0.08em" }}
             >
-              Guild of Organists of Nigeria
+              {SITE_NAME}
             </span>
           </div>
 
+          {/* Mobile: search (right) */}
           <div className="lg:hidden absolute" style={{ right: "24px" }}>
-            <button
-              aria-label="Search"
-              className="hover:opacity-70 transition-opacity"
-              style={{ color: "var(--color-nav-text)" }}
-            >
+            <button aria-label="Search" className="hover:opacity-70 transition-opacity" style={{ color: "var(--color-nav-text)" }}>
               <Search size={18} />
             </button>
           </div>
 
-          {/* 4. DESKTOP LOGO */}
+          {/* Desktop: logo floating above the navbar */}
           <div
             className="hidden lg:flex absolute flex-col items-center gap-1 pointer-events-none"
             style={{ top: "-48px", left: "72px", zIndex: 80 }}
           >
             <Link href="/" className="pointer-events-auto">
-              <div
-                className="rounded-full overflow-hidden flex items-center justify-center flex-shrink-0"
-                style={{ width: "72px", height: "72px" }}
-              >
-                <Image
-                  src="/images/gonig-logo.webp"
-                  alt="GONiG Logo"
-                  width={72}
-                  height={72}
-                  className="w-full h-full object-cover"
-                />
+              <div className="rounded-full overflow-hidden" style={{ width: "72px", height: "72px" }}>
+                <Image src="/images/gonig-logo.webp" alt="GONiG Logo" width={72} height={72} className="w-full h-full object-cover" />
               </div>
             </Link>
             <span
               className="text-xs uppercase leading-tight pointer-events-auto text-center"
-              style={{
-                fontFamily: "var(--font-playfair)",
-                color: "var(--color-nav-text)",
-                letterSpacing: "0.08em",
-              }}
+              style={{ fontFamily: "var(--font-playfair)", color: "var(--color-nav-text)", letterSpacing: "0.08em" }}
             >
-              Guild of Organists of Nigeria
+              {SITE_NAME}
             </span>
           </div>
 
-          <div
-            className="hidden lg:block"
-            style={{ width: "clamp(200px, 35vw, 560px)" }}
-          />
+          {/* Spacer — pushes links to the right of the logo region */}
+          <div className="hidden lg:block" style={{ width: "clamp(200px, 35vw, 560px)" }} />
 
-          {/* Desktop nav links */}
+          {/* Desktop: nav links with per-item dropdowns */}
           <div className="hidden lg:flex items-center gap-16 flex-nowrap flex-shrink-0">
-            {navItems.map((item) => (
+            {NAV_ITEMS.map((item) => (
               <div
                 key={item.label}
+                className="relative"
                 onMouseEnter={() => handleMouseEnter(item.label)}
                 onMouseLeave={handleMouseLeave}
               >
                 <button
-                  className="flex items-center gap-1 font-medium hover:opacity-70 transition-opacity uppercase"
+                  className="flex items-center gap-1.5 hover:opacity-70 transition-opacity uppercase"
                   style={{
                     fontFamily: "var(--font-montserrat)",
-                    letterSpacing: "-0.04em",
-                    color: "var(--color-nav-text)",
                     fontSize: "12px",
+                    fontWeight: 600,
+                    letterSpacing: "0.04em",
+                    color: "var(--color-nav-text)",
                   }}
                 >
                   {item.label}
-                  <ChevronDown
-                    size={13}
-                    style={{
-                      transition: "transform 0.3s ease",
-                      transform:
-                        openDropdown === item.label
-                          ? "rotate(180deg)"
-                          : "rotate(0deg)",
-                    }}
-                  />
+                  {/* Static chevron — indicates submenu exists, does not animate */}
+                  <ChevronDown size={12} style={{ opacity: 0.6, flexShrink: 0 }} />
                 </button>
+
+                {/* ── Simple dropdown ── */}
+                <AnimatePresence>
+                  {openDropdown === item.label && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 4 }}
+                      transition={{ duration: 0.15, ease: "easeOut" }}
+                      className="absolute top-full left-0"
+                      style={{
+                        marginTop: "16px",
+                        minWidth: "200px",
+                        backgroundColor: "#2a0000",
+                        border: "1px solid rgba(255,249,236,0.1)",
+                        zIndex: 90,
+                      }}
+                    >
+                      {item.children.map((child, i) => (
+                        <Link
+                          key={child.label}
+                          href={child.href}
+                          className="block hover:bg-white/8 transition-colors"
+                          style={{
+                            fontFamily: "var(--font-montserrat)",
+                            color: "var(--color-nav-text)",
+                            fontSize: "14px",
+                            letterSpacing: "-0.01em",
+                            padding: "13px 20px",
+                            borderBottom:
+                              i < item.children.length - 1
+                                ? "1px solid rgba(255,249,236,0.07)"
+                                : "none",
+                            opacity: 0.85,
+                          }}
+                        >
+                          {child.label}
+                        </Link>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             ))}
           </div>
 
-          <div
-            className="hidden lg:flex items-center gap-4 absolute"
-            style={{ right: "72px" }}
-          >
-            <button
-              aria-label="Search"
-              className="hover:opacity-70 transition-opacity"
-              style={{ color: "var(--color-nav-text)" }}
-            >
+          {/* Desktop: search (right) */}
+          <div className="hidden lg:flex items-center gap-4 absolute" style={{ right: "72px" }}>
+            <button aria-label="Search" className="hover:opacity-70 transition-opacity" style={{ color: "var(--color-nav-text)" }}>
               <Search size={18} />
             </button>
           </div>
         </nav>
       </header>
 
-      {/* Invisible bridge */}
-      <div
-        className="hidden lg:block fixed left-0 w-full"
-        style={{ top: "112px", height: "8px", zIndex: 69 }}
-        onMouseEnter={() => openDropdown && handleMouseEnter(openDropdown)}
-      />
-
-      {/* Mega menu */}
-      <AnimatePresence>
-        {openDropdown && (
-          <motion.div
-            key={openDropdown}
-            initial={{ opacity: 0, y: -16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -16 }}
-            transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
-            className="hidden lg:block fixed left-0 w-full backdrop-blur-md pointer-events-auto"
-            style={{
-              top: "120px",
-              height: "380px",
-              backgroundColor: "rgba(56, 1, 1, 0.4)",
-              zIndex: 68,
-            }}
-            onMouseEnter={() => handleMouseEnter(openDropdown!)}
-            onMouseLeave={handleMouseLeave}
-          >
-            <div
-              className="flex gap-24 h-full items-center"
-              style={{ paddingLeft: "72px", paddingRight: "72px" }}
-            >
-              <div className="flex items-baseline gap-3 flex-shrink-0">
-                <h2
-                  className="text-6xl"
-                  style={{
-                    fontFamily: "var(--font-playfair)",
-                    color: "var(--color-nav-text)",
-                    fontWeight: 400,
-                  }}
-                >
-                  {openDropdown}
-                </h2>
-                <span
-                  style={{
-                    color: "var(--color-nav-text)",
-                    opacity: 0.5,
-                    fontSize: "56px",
-                    fontWeight: 200,
-                  }}
-                >
-                  /
-                </span>
-              </div>
-
-              <div
-                className="flex flex-col"
-                style={{ maxWidth: "480px", gap: "28px" }}
-              >
-                {navItems
-                  .find((item) => item.label === openDropdown)
-                  ?.children?.map((child) => (
-                    <Link
-                      key={child.label}
-                      href={child.href}
-                      className="flex items-center justify-between group hover:opacity-60 transition-opacity"
-                      style={{ color: "var(--color-nav-text)" }}
-                    >
-                      <span
-                        className="uppercase"
-                        style={{
-                          fontFamily: "var(--font-montserrat)",
-                          letterSpacing: "-0.02em",
-                          fontSize: "20px",
-                        }}
-                      >
-                        {child.label}
-                      </span>
-                      <ChevronDown
-                        size={16}
-                        style={{
-                          transform: "rotate(-90deg)",
-                          color: "var(--color-nav-text)",
-                          opacity: 0.6,
-                          marginLeft: "48px",
-                        }}
-                      />
-                    </Link>
-                  ))}
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Mobile Menu */}
+      {/* ── Mobile menu (full-screen slide-out) ── */}
       <AnimatePresence>
         {mobileOpen && (
           <>
+            {/* Backdrop */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.3, ease: "easeOut" }}
+              transition={{ duration: 0.25 }}
               className="lg:hidden fixed inset-0 z-[100]"
               style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
               onClick={() => setMobileOpen(false)}
             />
-            {/* Panel — flex column, NO overflow on the outer div */}
+
+            {/* Panel */}
             <motion.div
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
-              transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
+              transition={{ duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
               className="lg:hidden fixed top-0 left-0 h-full w-full z-[110] flex flex-col"
-              style={{ backgroundColor: "#3D0C0C" }}
+              style={{ backgroundColor: "var(--color-topbar)" }}
             >
-              {/* Fixed header — never scrolls */}
+              {/* Fixed header */}
               <div
                 className="flex-shrink-0 flex items-center justify-between"
-                style={{
-                  padding: "20px 32px",
-                  borderBottom: "1px solid rgba(255,249,236,0.1)",
-                }}
+                style={{ padding: "20px 32px", borderBottom: "1px solid rgba(255,249,236,0.1)" }}
               >
                 <div className="flex items-center gap-3">
-                  <div
-                    className="rounded-full overflow-hidden flex-shrink-0"
-                    style={{ width: "40px", height: "40px" }}
-                  >
-                    <Image
-                      src="/images/gonig-logo.webp"
-                      alt="GONiG Logo"
-                      width={72}
-                      height={72}
-                      className="w-full h-full object-cover"
-                    />
+                  <div className="rounded-full overflow-hidden flex-shrink-0" style={{ width: "40px", height: "40px" }}>
+                    <Image src="/images/gonig-logo.webp" alt="GONiG Logo" width={72} height={72} className="w-full h-full object-cover" />
                   </div>
                   <span
                     className="text-xs uppercase"
-                    style={{
-                      fontFamily: "var(--font-playfair)",
-                      color: "var(--color-nav-text)",
-                      letterSpacing: "0.08em",
-                    }}
+                    style={{ fontFamily: "var(--font-playfair)", color: "var(--color-nav-text)", letterSpacing: "0.08em" }}
                   >
-                    Guild of Organists of Nigeria
+                    {SITE_NAME}
                   </span>
                 </div>
-                <button
-                  onClick={() => setMobileOpen(false)}
-                  style={{ color: "var(--color-nav-text)" }}
-                >
+                <button onClick={() => setMobileOpen(false)} aria-label="Close menu" style={{ color: "var(--color-nav-text)" }}>
                   <X size={22} />
                 </button>
               </div>
 
-              {/* Scrollable content area — only this part scrolls */}
+              {/* Scrollable nav content */}
               <div
                 className="flex-1 overflow-y-auto"
-                style={{
-                  paddingLeft: "32px",
-                  paddingRight: "32px",
-                  paddingTop: "24px",
-                  paddingBottom: "48px",
-                  overscrollBehavior: "none",
-                }}
+                style={{ padding: "24px 32px 48px", overscrollBehavior: "none" }}
               >
-                {navItems.map((item) => (
+                {NAV_ITEMS.map((item) => (
                   <div key={item.label}>
                     <button
                       className="w-full flex items-center justify-between uppercase"
@@ -441,7 +283,7 @@ useEffect(() => {
                         color: "var(--color-nav-text)",
                         fontSize: "16px",
                         fontWeight: 600,
-                        letterSpacing: "-0.02em",
+                        letterSpacing: "-0.01em",
                         paddingTop: "20px",
                         paddingBottom: "20px",
                       }}
@@ -453,52 +295,43 @@ useEffect(() => {
                     >
                       {item.label}
                       <ChevronDown
-                        size={20}
+                        size={18}
                         style={{
-                          transition: "transform 0.3s ease",
-                          transform:
-                            openMobileSection === item.label
-                              ? "rotate(180deg)"
-                              : "rotate(0deg)",
                           color: "var(--color-nav-text)",
                           opacity: 0.5,
+                          transition: "transform 0.25s ease",
+                          transform: openMobileSection === item.label ? "rotate(180deg)" : "rotate(0deg)",
                         }}
                       />
                     </button>
+
                     <AnimatePresence>
                       {openMobileSection === item.label && (
                         <motion.div
                           initial={{ height: 0, opacity: 0 }}
                           animate={{ height: "auto", opacity: 1 }}
                           exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.2 }}
                           className="overflow-hidden"
                         >
-                          <div
-                            className="flex flex-col"
-                            style={{ paddingTop: "16px", paddingBottom: "8px" }}
-                          >
+                          <div className="flex flex-col" style={{ paddingBottom: "12px" }}>
                             {item.children.map((child) => (
                               <Link
                                 key={child.label}
                                 href={child.href}
-                                className="flex items-center justify-between uppercase hover:opacity-60 transition-opacity"
+                                className="uppercase hover:opacity-60 transition-opacity"
                                 style={{
                                   fontFamily: "var(--font-montserrat)",
                                   color: "var(--color-nav-text)",
-                                  fontSize: "13px",
-                                  paddingTop: "14px",
-                                  paddingBottom: "14px",
+                                  fontSize: "14px",
+                                  opacity: 0.65,
+                                  paddingTop: "13px",
+                                  paddingBottom: "13px",
+                                  paddingLeft: "16px",
                                 }}
                                 onClick={() => setMobileOpen(false)}
                               >
                                 {child.label}
-                                <ChevronDown
-                                  size={14}
-                                  style={{
-                                    transform: "rotate(-90deg)",
-                                    opacity: 0.4,
-                                  }}
-                                />
                               </Link>
                             ))}
                           </div>
@@ -508,16 +341,12 @@ useEffect(() => {
                   </div>
                 ))}
 
-                {/* Top bar links — secondary hierarchy */}
+                {/* Secondary links (TopBar) */}
                 <div
                   className="flex flex-col"
-                  style={{
-                    marginTop: "40px",
-                    paddingTop: "24px",
-                    borderTop: "1px solid rgba(255,249,236,0.08)",
-                  }}
+                  style={{ marginTop: "40px", paddingTop: "24px", borderTop: "1px solid rgba(255,249,236,0.08)" }}
                 >
-                  {topBarLinks.map((link) => (
+                  {TOP_BAR_LINKS.map((link) => (
                     <Link
                       key={link.label}
                       href={link.href}
@@ -527,10 +356,10 @@ useEffect(() => {
                         color: "var(--color-nav-text)",
                         fontSize: "14px",
                         fontWeight: 400,
-                        opacity: 0.6,
-                        letterSpacing: "0.08em",
-                        paddingTop: "14px",
-                        paddingBottom: "14px",
+                        opacity: 0.55,
+                        letterSpacing: "0.06em",
+                        paddingTop: "13px",
+                        paddingBottom: "13px",
                       }}
                       onClick={() => setMobileOpen(false)}
                     >

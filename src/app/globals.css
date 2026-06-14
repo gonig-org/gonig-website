@@ -1,26 +1,110 @@
 @import "tailwindcss";
 
+/*
+ * ==========================================================================
+ * GONiG Design Tokens
+ * ==========================================================================
+ * All brand colours, fonts, and spacing live here as CSS custom properties.
+ * When the brand evolves, update THESE values — not fifty inline styles.
+ *
+ * Naming convention:
+ *   --color-<semantic-name>   → colours
+ *   --font-<family-alias>    → fonts (set by next/font in layout.tsx)
+ *   --space-<name>           → spacing / padding shorthands
+ * ==========================================================================
+ */
+
 :root {
-  --color-topbar: #3D0C0C;
-  --color-navbar: #380101;
-  --color-nav-text: #FFF9EC;
+  /* --- Brand colours --- */
+  --color-topbar: #3D0C0C;       /* Top utility bar background */
+  --color-navbar: #380101;        /* Navbar accent / CTA button background */
+  --color-nav-text: #FFF9EC;      /* Light text on dark surfaces */
+  --color-body-bg: #230000;       /* Page-level background (dark maroon) */
+  --color-surface-dark: #0D0101;  /* Section background — about page, etc. */
+  --color-surface-light: #F7E5C2; /* Section background — CTA, legal pages */
+  --color-text-dark: #1a0000;     /* Body text on light surfaces */
   --color-background: #FFFFFF;
   --color-foreground: #1A1A1A;
-  --font-montserrat: var(--font-montserrat);
+
+  /* --- Fluid spacing (responsive section padding) --- */
+  --space-section-x: clamp(24px, 5vw, 72px);
+  --space-section-y: clamp(64px, 8vw, 120px);
+  --space-page-top: clamp(120px, 14vw, 180px);
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
+/*
+ * Smooth scroll for anchor links and "back to top" behaviour.
+ * Background colour set here so the browser chrome / overscroll
+ * area matches the dark GONiG palette.
+ */
 html {
   scroll-behavior: smooth;
-  background-color: #230000;
+  background-color: var(--color-body-bg);
 }
 
 body {
-  background-color: #230000;
+  background-color: var(--color-body-bg);
   color: var(--color-foreground);
+}
+
+/*
+ * ==========================================================================
+ * Utility classes for repeated text patterns
+ * ==========================================================================
+ * These eliminate the dozens of identical inline style objects scattered
+ * across every page. Use them on elements directly, or compose with
+ * Tailwind classes via the `cn()` helper.
+ * ==========================================================================
+ */
+
+/* Playfair Display headings — elegant serif used for all h1/h2 */
+.font-heading {
+  font-family: var(--font-playfair);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+/* Montserrat body text — the workhorse for paragraphs */
+.font-body {
+  font-family: var(--font-montserrat);
+  font-size: clamp(13px, 1.1vw, 15px);
+  line-height: 1.9;
+  letter-spacing: -0.01em;
+}
+
+/* Montserrat labels — section overlines, breadcrumbs, form labels */
+.font-label {
+  font-family: var(--font-montserrat);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+/* Montserrat nav links — smaller, tight-tracked */
+.font-nav {
+  font-family: var(--font-montserrat);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/*
+ * Responsive section padding — used on every major <section>.
+ * Apply via class instead of repeating the clamp() values inline.
+ */
+.section-padding {
+  padding-left: var(--space-section-x);
+  padding-right: var(--space-section-x);
+  padding-top: var(--space-section-y);
+  padding-bottom: var(--space-section-y);
+}
+
+/* Small decorative rule used before headings */
+.decorative-line {
+  width: 32px;
+  height: 2px;
+  opacity: 0.4;
 }
