@@ -377,7 +377,6 @@ export default function AboutOverview() {
               }}
             >
               Learn about membership
-              <span style={{ fontSize: "10px" }}>&#9658;</span>
             </Link>
           </div>
 
@@ -460,7 +459,6 @@ export default function AboutOverview() {
               }}
             >
               Apply for Membership
-              <span style={{ fontSize: "10px" }}>&#9658;</span>
             </Link>
             <Link
               href="/membership"

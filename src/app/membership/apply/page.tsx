@@ -595,7 +595,6 @@ export default function ApplyPage() {
                 }}
               >
                 Submit Application
-                <span style={{ fontSize: "10px" }}>&#9658;</span>
               </button>
             </div>
           </form>

@@ -195,7 +195,7 @@ export default function HeroSlider() {
               {/* CTA */}
               <Link
                 href={event.href}
-                className="flex items-center gap-3 hover:opacity-75 transition-opacity"
+                className="inline-flex items-center gap-3 hover:opacity-75 transition-opacity"
                 style={{
                   fontFamily: "var(--font-montserrat)",
                   fontSize: "13px",
@@ -204,12 +204,10 @@ export default function HeroSlider() {
                   textTransform: "uppercase",
                   color: "var(--color-nav-text)",
                   border: "1px solid rgba(255,249,236,0.6)",
-                  padding: "18px 32px",
-                  width: "fit-content",
+                  padding: "12px 28px",
                 }}
               >
                 Learn More
-                <span style={{ fontSize: "10px" }}>&#9658;</span>
               </Link>
             </motion.div>
           </AnimatePresence>

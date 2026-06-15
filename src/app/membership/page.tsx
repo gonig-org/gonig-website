@@ -493,7 +493,6 @@ export default function MembershipPage() {
             }}
           >
             Apply for Membership
-            <span style={{ fontSize: "10px" }}>&#9658;</span>
           </Link>
         </div>
       </section>

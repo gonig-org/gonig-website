@@ -28,19 +28,17 @@ export const NAV_ITEMS: NavItem[] = [
     label: "About Us",
     href: "/about",
     children: [
-      { label: "Overview", href: "/about" },
-      { label: "Governance", href: "/about/governance" },
-      { label: "Leadership", href: "/about/leadership" },
-      { label: "Partners", href: "/about/partners" },
+      { label: "About the Guild", href: "/about" },
+      { label: "National Executives", href: "/about/executives" },
+      { label: "Board of Advisers", href: "/about/advisers" },
+      { label: "Board of Trustees", href: "/about/trustees" },
     ],
   },
   {
     label: "Membership",
     href: "/membership",
     children: [
-      { label: "Why Join", href: "/membership/why-join" },
-      { label: "Categories", href: "/membership/categories" },
-      { label: "Benefits", href: "/membership/benefits" },
+      { label: "Membership Overview", href: "/membership" },
       { label: "Apply", href: "/membership/apply" },
       { label: "Renew", href: "/membership/renew" },
     ],
@@ -49,6 +47,7 @@ export const NAV_ITEMS: NavItem[] = [
     label: "Education",
     href: "/education",
     children: [
+      { label: "Education Overview", href: "/education" },
       { label: "Programmes", href: "/education/programmes" },
       { label: "Mentorship", href: "/education/mentorship" },
       { label: "Study Resources", href: "/education/resources" },
@@ -58,6 +57,7 @@ export const NAV_ITEMS: NavItem[] = [
     label: "Events",
     href: "/events",
     children: [
+      { label: "Events Overview", href: "/events" },
       { label: "Conference", href: "/events/conference" },
       { label: "Workshops", href: "/events/workshops" },
       { label: "Competitions", href: "/events/competitions" },

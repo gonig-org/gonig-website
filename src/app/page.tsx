@@ -124,7 +124,6 @@ export default function Home() {
               }}
             >
               Read the full story
-              <span style={{ fontSize: "10px" }}>&#9658;</span>
             </Link>
           </div>
 
@@ -236,10 +235,11 @@ export default function Home() {
               come.
             </p>
 
-            <div className="flex gap-4 items-center">
+            {/* Buttons stack on mobile, sit side-by-side on desktop */}
+            <div className="flex flex-col lg:flex-row gap-4">
               <Link
                 href="/membership/apply"
-                className="font-nav flex items-center gap-3 hover:opacity-85 transition-opacity"
+                className="font-nav flex items-center justify-center lg:justify-start gap-3 hover:opacity-85 transition-opacity"
                 style={{
                   backgroundColor: "var(--color-navbar)",
                   color: "var(--color-nav-text)",
@@ -248,14 +248,12 @@ export default function Home() {
                   letterSpacing: "0.12em",
                 }}
               >
-                <span className="lg:hidden">Apply</span>
-                <span className="hidden lg:inline">Apply for Membership</span>
-                <span style={{ fontSize: "10px" }}>&#9658;</span>
-              </Link>
+                Apply for Membership
+                </Link>
 
               <Link
                 href="/membership"
-                className="font-nav flex items-center gap-3 hover:opacity-70 transition-opacity"
+                className="font-nav flex items-center justify-center lg:justify-start gap-3 hover:opacity-70 transition-opacity"
                 style={{
                   border: "1px solid var(--color-navbar)",
                   color: "var(--color-navbar)",
@@ -272,8 +270,8 @@ export default function Home() {
               style={{
                 fontFamily: "var(--font-montserrat)",
                 color: "var(--color-text-dark)",
-                fontSize: "14px",
-                opacity: 0.5,
+                fontSize: "15px",
+                opacity: 0.65,
                 borderTop: "1px solid rgba(26,0,0,0.12)",
                 paddingTop: "24px",
               }}
