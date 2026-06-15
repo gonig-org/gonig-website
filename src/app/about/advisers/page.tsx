@@ -1,27 +1,10 @@
-/**
- * Board of Advisers page.
- *
- * No bios are available for this board, so the page renders as a
- * formal register — names listed on ruled lines in two columns on
- * desktop, single column on mobile. Clean and deliberate, not sparse.
- *
- * When bios or images become available, convert to the executives
- * card layout used in /about/executives.
- */
+import { getAdvisers, type SanityAdviser } from "@/sanity/lib/queries";
 
-const ADVISERS = [
-  { name: "Mr. Ibiyefiebo Harry" },
-  { name: "Mr. Oluwamuyiwa Akinmejiwa" },
-  { name: "Dr. Segun Fadeyi" },
-  { name: "Mr. Akin Olubi" },
-  { name: "Engr. Babajide Idowu" },
-  { name: "Dr. Dayo Oyedun" },
-  { name: "Mr. Theophilus Okang" },
-  { name: "Prof. Soji Adejumo" },
-  { name: "Revd. Canon Bola Omodun Ilori" },
-];
+export const revalidate = 60;
 
-export default function BoardOfAdvisers() {
+export default async function BoardOfAdvisers() {
+  const advisers = await getAdvisers();
+
   return (
     <div style={{ backgroundColor: "#FFFFFF" }}>
 
@@ -97,7 +80,7 @@ export default function BoardOfAdvisers() {
             borderTop: "3px solid var(--color-navbar)",
           }}
         >
-          {/* Column headers */}
+          {/* Column header */}
           <div
             className="grid grid-cols-1 lg:grid-cols-2"
             style={{
@@ -122,12 +105,12 @@ export default function BoardOfAdvisers() {
 
           {/* Members */}
           <div className="grid grid-cols-1 lg:grid-cols-2">
-            {ADVISERS.map((adviser, index) => {
+            {advisers.map((adviser: SanityAdviser, index: number) => {
               const isLastOdd =
-                ADVISERS.length % 2 !== 0 && index === ADVISERS.length - 1;
+                advisers.length % 2 !== 0 && index === advisers.length - 1;
               const isRightColumn = index % 2 !== 0;
               const isLastRow =
-                index >= ADVISERS.length - (ADVISERS.length % 2 === 0 ? 2 : 1);
+                index >= advisers.length - (advisers.length % 2 === 0 ? 2 : 1);
 
               return (
                 <div
