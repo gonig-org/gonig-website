@@ -447,10 +447,10 @@ export default function AboutOverview() {
             </p>
           </div>
 
-          <div className="flex gap-4 items-center">
+          <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
             <Link
               href="/membership/apply"
-              className="font-nav flex items-center gap-3 hover:opacity-85 transition-opacity whitespace-nowrap"
+              className="font-nav flex items-center justify-center hover:opacity-85 transition-opacity"
               style={{
                 backgroundColor: "var(--color-nav-text)",
                 color: "var(--color-navbar)",
@@ -462,7 +462,7 @@ export default function AboutOverview() {
             </Link>
             <Link
               href="/membership"
-              className="font-nav flex items-center gap-3 hover:opacity-70 transition-opacity whitespace-nowrap"
+              className="font-nav flex items-center justify-center hover:opacity-70 transition-opacity"
               style={{
                 border: "1px solid rgba(255,249,236,0.5)",
                 color: "var(--color-nav-text)",
