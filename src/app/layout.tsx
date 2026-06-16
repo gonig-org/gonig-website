@@ -35,6 +35,10 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   title: "Guild of Organists Nigeria | GONiG",
   description: "The collective voice of organists across Nigeria.",
+  icons: {
+    icon: "/images/gonig-logo.webp",
+    apple: "/images/gonig-logo.webp",
+  },
 };
 
 export const viewport = {

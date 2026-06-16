@@ -5,6 +5,7 @@ import { schemaTypes } from "./schemaTypes";
 export default defineConfig({
   name: "gonig",
   title: "GONiG",
+  basePath: "/studio",
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
   plugins: [structureTool()],
