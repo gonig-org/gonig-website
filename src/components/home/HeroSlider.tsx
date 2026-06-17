@@ -53,7 +53,6 @@ const events = [
 
 export default function HeroSlider() {
   const [current, setCurrent] = useState(0);
-  const [paused, setPaused] = useState(false);
   const [progress, setProgress] = useState(0); // 0–100, drives the tab progress bar
 
   const goTo = useCallback((index: number) => {
@@ -64,10 +63,8 @@ export default function HeroSlider() {
   const prev = () => goTo(current === 0 ? events.length - 1 : current - 1);
   const next = useCallback(() => goTo(current === events.length - 1 ? 0 : current + 1), [current, goTo]);
 
-  // Auto-advance — desktop only (paused flag set via pointer events on the hero)
+  // Auto-advance — always running, never paused by hover
   useEffect(() => {
-    if (paused) return;
-
     const step = 50; // update interval in ms
     const increment = (step / SLIDE_DURATION) * 100;
 
@@ -82,20 +79,18 @@ export default function HeroSlider() {
     }, step);
 
     return () => clearInterval(interval);
-  }, [paused, next]);
+  }, [next]);
 
   const event = events[current];
 
   return (
     <div
-      className="relative w-full mt-16 h-[calc(100vh-64px)] lg:mt-[120px] lg:h-[calc(100vh-120px)]"
+      className="relative w-full mt-16 h-[70vh] lg:mt-[120px] lg:h-[calc(100vh-120px)]"
       /*
        * Pushed below the fixed nav entirely — image no longer tucks behind it.
        * Mobile:  64px navbar only  → mt-16,  height = 100vh - 64px
        * Desktop: 56px TopBar + 64px Navbar = 120px → mt-[120px], height = 100vh - 120px
        */
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
     >
       {/* ── Background image — crossfades between slides ── */}
       <AnimatePresence initial={false}>
@@ -248,19 +243,17 @@ export default function HeroSlider() {
                 position: "relative",
               }}
             >
-              {!paused && (
-                <motion.div
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    height: "1px",
-                    backgroundColor: "var(--color-nav-text)",
-                    opacity: 0.7,
-                    width: `${progress}%`,
-                  }}
-                />
-              )}
+              <motion.div
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  height: "1px",
+                  backgroundColor: "var(--color-nav-text)",
+                  opacity: 0.7,
+                  width: `${progress}%`,
+                }}
+              />
             </div>
           </div>
 

@@ -107,6 +107,7 @@ export default function AboutOverview() {
 
             <div className="flex flex-col gap-6">
               <p
+                className="text-justify lg:text-left"
                 style={{
                   fontFamily: "var(--font-montserrat)",
                   color: "var(--color-text-dark)",
@@ -123,6 +124,7 @@ export default function AboutOverview() {
                 reverence for the pipe organ and its sacred heritage.
               </p>
               <p
+                className="text-justify lg:text-left"
                 style={{
                   fontFamily: "var(--font-montserrat)",
                   color: "var(--color-text-dark)",
@@ -160,7 +162,7 @@ export default function AboutOverview() {
               style={{ height: "clamp(300px, 38vw, 520px)" }}
             >
               <Image
-                src="/images/hero-bg.webp"
+                src="/images/about-guild.webp"
                 alt="Early Guild gathering"
                 fill
                 className="object-cover object-center"
@@ -206,7 +208,7 @@ export default function AboutOverview() {
               style={{ height: "clamp(260px, 32vw, 460px)" }}
             >
               <Image
-                src="/images/hero-float.webp"
+                src="/images/about-guild.webp"
                 alt="Guild mission"
                 fill
                 className="object-cover object-center"
@@ -251,6 +253,7 @@ export default function AboutOverview() {
               To promote, preserve, and advance the art of organ music in Nigeria
             </h2>
             <p
+              className="text-justify lg:text-left"
               style={{
                 fontFamily: "var(--font-montserrat)",
                 color: "var(--color-text-dark)",
@@ -349,6 +352,7 @@ export default function AboutOverview() {
               A Nigeria where the organ resounds in every generation
             </h2>
             <p
+              className="text-justify lg:text-left"
               style={{
                 fontFamily: "var(--font-montserrat)",
                 color: "var(--color-text-dark)",
@@ -435,6 +439,7 @@ export default function AboutOverview() {
               Ready to become a part of the Guild?
             </h3>
             <p
+              className="text-justify lg:text-left"
               style={{
                 fontFamily: "var(--font-montserrat)",
                 color: "var(--color-nav-text)",
@@ -447,27 +452,29 @@ export default function AboutOverview() {
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
+          <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto lg:flex-shrink-0">
             <Link
               href="/membership/apply"
-              className="font-nav flex items-center justify-center hover:opacity-85 transition-opacity"
+              className="font-nav flex items-center justify-center whitespace-nowrap hover:opacity-85 transition-opacity"
               style={{
                 backgroundColor: "var(--color-nav-text)",
                 color: "var(--color-navbar)",
                 padding: "18px 36px",
                 fontSize: "13px",
+                letterSpacing: "0.1em",
               }}
             >
               Apply for Membership
             </Link>
             <Link
               href="/membership"
-              className="font-nav flex items-center justify-center hover:opacity-70 transition-opacity"
+              className="font-nav flex items-center justify-center whitespace-nowrap hover:opacity-70 transition-opacity"
               style={{
                 border: "1px solid rgba(255,249,236,0.5)",
                 color: "var(--color-nav-text)",
                 padding: "18px 36px",
                 fontSize: "13px",
+                letterSpacing: "0.1em",
               }}
             >
               Learn More
