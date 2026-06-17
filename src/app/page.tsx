@@ -81,7 +81,7 @@ export default function Home() {
 
             <div className="flex flex-col gap-5">
               <p
-                className="text-justify lg:text-left"
+
                 style={{
                   fontFamily: "var(--font-montserrat)",
                   color: "var(--color-text-dark)",
@@ -97,7 +97,7 @@ export default function Home() {
                 a deep reverence for the pipe organ and its sacred heritage.
               </p>
               <p
-                className="text-justify lg:text-left"
+
                 style={{
                   fontFamily: "var(--font-montserrat)",
                   color: "var(--color-text-dark)",

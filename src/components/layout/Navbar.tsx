@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useRef, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { ChevronDown, Search, Menu, X } from "lucide-react";
+import { ChevronDown, Menu, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import TopBar from "./TopBar";
 import { NAV_ITEMS, TOP_BAR_LINKS, SITE_NAME } from "@/lib/constants";
@@ -105,8 +105,8 @@ export default function Navbar() {
             {mobileOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
 
-          {/* Mobile: centred logo + name */}
-          <div className="lg:hidden absolute left-1/2 -translate-x-1/2 flex items-center gap-3">
+          {/* Mobile: centred logo + name — links to home */}
+          <Link href="/" className="lg:hidden absolute left-1/2 -translate-x-1/2 flex items-center gap-3">
             <div className="rounded-full overflow-hidden flex-shrink-0" style={{ width: "44px", height: "44px" }}>
               <Image src="/images/gonig-logo.webp" alt="GONiG Logo" width={72} height={72} className="w-full h-full object-cover" />
             </div>
@@ -116,14 +116,8 @@ export default function Navbar() {
             >
               {SITE_NAME}
             </span>
-          </div>
+          </Link>
 
-          {/* Mobile: search (right) */}
-          <div className="lg:hidden absolute" style={{ right: "24px" }}>
-            <button aria-label="Search" className="hover:opacity-70 transition-opacity" style={{ color: "var(--color-nav-text)" }}>
-              <Search size={18} />
-            </button>
-          </div>
 
           {/* Desktop: logo floating above the navbar */}
           <div
@@ -215,12 +209,6 @@ export default function Navbar() {
             ))}
           </div>
 
-          {/* Desktop: search (right) */}
-          <div className="hidden lg:flex items-center gap-4 absolute" style={{ right: "72px" }}>
-            <button aria-label="Search" className="hover:opacity-70 transition-opacity" style={{ color: "var(--color-nav-text)" }}>
-              <Search size={18} />
-            </button>
-          </div>
         </nav>
       </header>
 

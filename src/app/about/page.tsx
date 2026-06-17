@@ -107,7 +107,7 @@ export default function AboutOverview() {
 
             <div className="flex flex-col gap-6">
               <p
-                className="text-justify lg:text-left"
+  
                 style={{
                   fontFamily: "var(--font-montserrat)",
                   color: "var(--color-text-dark)",
@@ -124,7 +124,7 @@ export default function AboutOverview() {
                 reverence for the pipe organ and its sacred heritage.
               </p>
               <p
-                className="text-justify lg:text-left"
+  
                 style={{
                   fontFamily: "var(--font-montserrat)",
                   color: "var(--color-text-dark)",
@@ -253,7 +253,7 @@ export default function AboutOverview() {
               To promote, preserve, and advance the art of organ music in Nigeria
             </h2>
             <p
-              className="text-justify lg:text-left"
+
               style={{
                 fontFamily: "var(--font-montserrat)",
                 color: "var(--color-text-dark)",
@@ -352,7 +352,7 @@ export default function AboutOverview() {
               A Nigeria where the organ resounds in every generation
             </h2>
             <p
-              className="text-justify lg:text-left"
+
               style={{
                 fontFamily: "var(--font-montserrat)",
                 color: "var(--color-text-dark)",
@@ -439,7 +439,7 @@ export default function AboutOverview() {
               Ready to become a part of the Guild?
             </h3>
             <p
-              className="text-justify lg:text-left"
+
               style={{
                 fontFamily: "var(--font-montserrat)",
                 color: "var(--color-nav-text)",
