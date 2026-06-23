@@ -41,6 +41,7 @@ export const NAV_ITEMS: NavItem[] = [
       { label: "Membership Overview", href: "/membership" },
       { label: "Apply", href: "/membership/apply" },
       { label: "Renew", href: "/membership/renew" },
+      { label: "Member Directory", href: "/membership/directory" },
     ],
   },
   {
