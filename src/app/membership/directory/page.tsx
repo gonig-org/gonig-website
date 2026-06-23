@@ -34,7 +34,7 @@ function StatusBadge({ status }: { status: Member["status"] }) {
         display: "inline-block",
         backgroundColor: isActive ? "#E8F5E9" : "#F0F0EB",
         color: isActive ? "#2E7D32" : "#6B6B60",
-        fontSize: "11px",
+        fontSize: "13px",
         fontFamily: "var(--font-montserrat)",
         fontWeight: 600,
         letterSpacing: "0.08em",
@@ -50,6 +50,7 @@ function StatusBadge({ status }: { status: Member["status"] }) {
 
 export default function MemberDirectoryPage() {
   const [query, setQuery] = useState("");
+  const [focused, setFocused] = useState(false);
 
   const filtered = MEMBERS.filter((m) => {
     const q = query.toLowerCase().trim();
@@ -84,7 +85,7 @@ export default function MemberDirectoryPage() {
               fontWeight: 700,
               letterSpacing: "0.18em",
               textTransform: "uppercase",
-              opacity: 0.55,
+              opacity: 0.65,
               display: "block",
               marginBottom: "16px",
             }}
@@ -144,6 +145,8 @@ export default function MemberDirectoryPage() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search by name or membership number..."
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
             style={{
               width: "100%",
               height: "52px",
@@ -154,15 +157,9 @@ export default function MemberDirectoryPage() {
               backgroundColor: "#FFFFFF",
               border: "1px solid #D8D0C0",
               borderRadius: "2px",
-              outline: "none",
+              outline: focused ? "2px solid var(--color-navbar)" : "none",
+              outlineOffset: focused ? "2px" : undefined,
               boxSizing: "border-box",
-            }}
-            onFocus={(e) => {
-              e.currentTarget.style.outline = "2px solid var(--color-navbar)";
-              e.currentTarget.style.outlineOffset = "2px";
-            }}
-            onBlur={(e) => {
-              e.currentTarget.style.outline = "none";
             }}
           />
           <p
@@ -213,7 +210,7 @@ export default function MemberDirectoryPage() {
                   letterSpacing: "0.15em",
                   textTransform: "uppercase",
                   color: "var(--color-text-dark)",
-                  opacity: 0.45,
+                  opacity: 0.65,
                 }}
               >
                 {label}
@@ -241,7 +238,7 @@ export default function MemberDirectoryPage() {
               </p>
             </div>
           ) : (
-            <div className="flex flex-col" style={{ gap: 0 }}>
+            <div className="flex flex-col">
               {filtered.map((member, index) => (
                 <div
                   key={member.membershipNo}
@@ -289,7 +286,7 @@ export default function MemberDirectoryPage() {
                     <span
                       style={{
                         fontFamily: "var(--font-montserrat)",
-                        fontSize: "12px",
+                        fontSize: "13px",
                         color: "var(--color-text-dark)",
                         opacity: 0.65,
                         letterSpacing: "0.06em",
