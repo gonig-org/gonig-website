@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Breadcrumb from "@/components/shared/Breadcrumb";
 
 interface Member {
   membershipNo: string;
@@ -34,7 +35,7 @@ function StatusBadge({ status }: { status: Member["status"] }) {
         display: "inline-block",
         backgroundColor: isActive ? "#E8F5E9" : "#F0F0EB",
         color: isActive ? "#2E7D32" : "#6B6B60",
-        fontSize: "13px",
+        fontSize: "14px",
         fontFamily: "var(--font-montserrat)",
         fontWeight: 600,
         letterSpacing: "0.08em",
@@ -81,7 +82,7 @@ export default function MemberDirectoryPage() {
             style={{
               fontFamily: "var(--font-montserrat)",
               color: "var(--color-nav-text)",
-              fontSize: "11px",
+              fontSize: "13px",
               fontWeight: 700,
               letterSpacing: "0.18em",
               textTransform: "uppercase",
@@ -92,11 +93,17 @@ export default function MemberDirectoryPage() {
           >
             Membership
           </span>
+          <Breadcrumb
+            items={[
+              { label: "Membership", href: "/membership" },
+              { label: "Member Directory" },
+            ]}
+          />
           <h1
             className="font-heading"
             style={{
               color: "var(--color-nav-text)",
-              fontSize: "clamp(32px, 4.5vw, 56px)",
+              fontSize: "clamp(36px, 4.5vw, 56px)",
               lineHeight: 1.08,
               letterSpacing: "-0.02em",
               marginBottom: "16px",
@@ -167,7 +174,7 @@ export default function MemberDirectoryPage() {
               fontFamily: "var(--font-montserrat)",
               fontSize: "13px",
               color: "var(--color-text-dark)",
-              opacity: 0.55,
+              opacity: 0.7,
               marginTop: "10px",
             }}
           >
@@ -231,7 +238,7 @@ export default function MemberDirectoryPage() {
                   fontFamily: "var(--font-montserrat)",
                   fontSize: "16px",
                   color: "var(--color-text-dark)",
-                  opacity: 0.55,
+                  opacity: 0.7,
                 }}
               >
                 No members match your search.
@@ -263,7 +270,7 @@ export default function MemberDirectoryPage() {
                         fontFamily: "var(--font-montserrat)",
                         fontSize: "13px",
                         color: "var(--color-text-dark)",
-                        opacity: 0.65,
+                        opacity: 0.7,
                         letterSpacing: "0.04em",
                       }}
                     >
@@ -288,7 +295,7 @@ export default function MemberDirectoryPage() {
                         fontFamily: "var(--font-montserrat)",
                         fontSize: "13px",
                         color: "var(--color-text-dark)",
-                        opacity: 0.65,
+                        opacity: 0.7,
                         letterSpacing: "0.06em",
                       }}
                     >
