@@ -266,7 +266,7 @@ export default function MemberDirectoryPage() {
                         fontFamily: "var(--font-montserrat)",
                         fontSize: "13px",
                         color: "var(--color-text-dark)",
-                        opacity: 0.6,
+                        opacity: 0.65,
                         letterSpacing: "0.04em",
                       }}
                     >
@@ -291,7 +291,7 @@ export default function MemberDirectoryPage() {
                         fontFamily: "var(--font-montserrat)",
                         fontSize: "12px",
                         color: "var(--color-text-dark)",
-                        opacity: 0.5,
+                        opacity: 0.65,
                         letterSpacing: "0.06em",
                       }}
                     >
