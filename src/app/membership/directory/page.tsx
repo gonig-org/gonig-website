@@ -212,12 +212,12 @@ export default function MemberDirectoryPage() {
                 key={label}
                 style={{
                   fontFamily: "var(--font-montserrat)",
-                  fontSize: "11px",
+                  fontSize: "13px",
                   fontWeight: 700,
                   letterSpacing: "0.15em",
                   textTransform: "uppercase",
                   color: "var(--color-text-dark)",
-                  opacity: 0.65,
+                  opacity: 0.7,
                 }}
               >
                 {label}
