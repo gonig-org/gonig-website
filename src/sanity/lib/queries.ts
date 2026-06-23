@@ -5,6 +5,12 @@ const CACHE = { next: { revalidate: 60 } };
 
 /* ── Types ── */
 
+export type SanityMember = {
+  membershipNo: string;
+  fullName: string;
+  status: "Active" | "Inactive";
+};
+
 export type SanityPerson = {
   name: string;
   bio: string | null;
@@ -22,6 +28,18 @@ export type SanityTrustee = {
 };
 
 /* ── Queries ── */
+
+export async function getMembersDirectory(): Promise<SanityMember[]> {
+  return client.fetch(
+    `*[_type == "member"] | order(membershipNo asc) {
+      membershipNo,
+      fullName,
+      status
+    }`,
+    {},
+    CACHE
+  );
+}
 
 export async function getExecutives(): Promise<SanityPerson[]> {
   return client.fetch(
