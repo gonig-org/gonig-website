@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Breadcrumb from "@/components/shared/Breadcrumb";
 
 interface Member {
   membershipNo: string;
@@ -27,21 +26,17 @@ const MEMBERS: Member[] = [
   { membershipNo: "GON-0015", fullName: "Mr. Seun Olalekan Adeyemi",     status: "Active"   },
 ];
 
-function StatusBadge({ status }: { status: Member["status"] }) {
+function StatusLabel({ status }: { status: Member["status"] }) {
   const isActive = status === "Active";
   return (
     <span
       style={{
-        display: "inline-block",
-        backgroundColor: isActive ? "#E8F5E9" : "#F0F0EB",
-        color: isActive ? "#2E7D32" : "#6B6B60",
-        fontSize: "14px",
         fontFamily: "var(--font-montserrat)",
-        fontWeight: 600,
-        letterSpacing: "0.08em",
+        fontSize: "13px",
+        fontWeight: 700,
+        letterSpacing: "0.12em",
         textTransform: "uppercase",
-        padding: "4px 12px",
-        borderRadius: "999px",
+        color: isActive ? "#2A6040" : "#8A7B6B",
       }}
     >
       {status}
@@ -93,12 +88,6 @@ export default function MemberDirectoryPage() {
           >
             Membership
           </span>
-          <Breadcrumb
-            items={[
-              { label: "Membership", href: "/membership" },
-              { label: "Member Directory" },
-            ]}
-          />
           <h1
             className="font-heading"
             style={{
@@ -195,16 +184,22 @@ export default function MemberDirectoryPage() {
           paddingRight: "var(--space-section-x)",
         }}
       >
-        <div style={{ maxWidth: "960px" }}>
-
-          {/* Column headers — desktop only */}
+        <div
+          style={{
+            maxWidth: "960px",
+            backgroundColor: "#FFFFFF",
+            border: "1px solid #E8E0D0",
+            borderTop: "3px solid var(--color-navbar)",
+          }}
+        >
+          {/* Column header row — desktop only, styled like advisers register */}
           <div
             className="hidden lg:grid"
             style={{
               gridTemplateColumns: "20% 55% 25%",
-              paddingBottom: "12px",
+              padding: "16px clamp(28px, 4vw, 44px)",
               borderBottom: "1px solid #E8E0D0",
-              marginBottom: "0",
+              backgroundColor: "#FAFAF8",
             }}
           >
             {["Membership No.", "Full Name", "Status"].map((label) => (
@@ -212,12 +207,11 @@ export default function MemberDirectoryPage() {
                 key={label}
                 style={{
                   fontFamily: "var(--font-montserrat)",
-                  fontSize: "13px",
+                  fontSize: "11px",
                   fontWeight: 700,
-                  letterSpacing: "0.15em",
+                  letterSpacing: "0.18em",
                   textTransform: "uppercase",
-                  color: "var(--color-text-dark)",
-                  opacity: 0.7,
+                  color: "var(--color-navbar)",
                 }}
               >
                 {label}
@@ -229,7 +223,7 @@ export default function MemberDirectoryPage() {
           {filtered.length === 0 ? (
             <div
               style={{
-                padding: "clamp(40px, 6vw, 72px) 0",
+                padding: "clamp(40px, 6vw, 72px) clamp(28px, 4vw, 44px)",
                 textAlign: "center",
               }}
             >
@@ -250,14 +244,8 @@ export default function MemberDirectoryPage() {
                 <div
                   key={member.membershipNo}
                   style={{
-                    backgroundColor: "#FFFFFF",
-                    border: "1px solid #E8E0D0",
-                    borderTop:
-                      index === 0
-                        ? "3px solid var(--color-navbar)"
-                        : "none",
-                    padding: "clamp(20px, 2.5vw, 28px) clamp(20px, 3vw, 32px)",
-                    marginBottom: "1px",
+                    borderBottom: index < filtered.length - 1 ? "1px solid #E8E0D0" : "none",
+                    padding: "clamp(20px, 2.5vw, 28px) clamp(28px, 4vw, 44px)",
                   }}
                 >
                   {/* Desktop: 3-column grid */}
@@ -285,7 +273,7 @@ export default function MemberDirectoryPage() {
                     >
                       {member.fullName}
                     </span>
-                    <StatusBadge status={member.status} />
+                    <StatusLabel status={member.status} />
                   </div>
 
                   {/* Mobile: stacked card */}
@@ -311,7 +299,7 @@ export default function MemberDirectoryPage() {
                     >
                       {member.fullName}
                     </span>
-                    <StatusBadge status={member.status} />
+                    <StatusLabel status={member.status} />
                   </div>
                 </div>
               ))}
