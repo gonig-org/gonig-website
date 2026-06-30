@@ -1,6 +1,6 @@
 import {
   CONTACT_EMAIL,
-  CONTACT_PHONE,
+  CONTACT_PHONES,
   CONTACT_ADDRESS,
 } from "@/lib/constants";
 
@@ -239,20 +239,25 @@ export default function Contact() {
                 >
                   Phone
                 </p>
-                <a
-                  href={`tel:${CONTACT_PHONE}`}
-                  style={{
-                    fontFamily: "var(--font-montserrat)",
-                    color: "var(--color-text-dark)",
-                    fontSize: "16px",
-                    lineHeight: 1.5,
-                    textDecoration: "none",
-                    opacity: 0.85,
-                  }}
-                  className="hover:opacity-100 transition-opacity"
-                >
-                  {CONTACT_PHONE}
-                </a>
+                <div className="flex flex-col gap-2">
+                  {CONTACT_PHONES.map((phone) => (
+                    <a
+                      key={phone}
+                      href={`tel:${phone}`}
+                      style={{
+                        fontFamily: "var(--font-montserrat)",
+                        color: "var(--color-text-dark)",
+                        fontSize: "16px",
+                        lineHeight: 1.5,
+                        textDecoration: "none",
+                        opacity: 0.85,
+                      }}
+                      className="hover:opacity-100 transition-opacity"
+                    >
+                      {phone}
+                    </a>
+                  ))}
+                </div>
               </div>
 
               {/* Response note */}

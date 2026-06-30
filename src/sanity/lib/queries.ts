@@ -24,7 +24,6 @@ export type SanityAdviser = {
 
 export type SanityTrustee = {
   name: string;
-  inMemoriam: boolean;
 };
 
 /* ── Queries ── */
@@ -66,22 +65,36 @@ export async function getAdvisers(): Promise<SanityAdviser[]> {
 
 export async function getFoundingTrustees(): Promise<SanityTrustee[]> {
   return client.fetch(
-    `*[_type == "person" && board == "trustees" && trusteeType == "founding"] | order(order asc) {
-      name,
-      inMemoriam
+    `*[_type == "person" && board == "trustees" && trusteeType == "founding" && inMemoriam != true] | order(order asc) {
+      name
     }`,
     {},
     CACHE
   );
 }
 
-export async function getAppointees(): Promise<SanityPerson[]> {
+export type SanityZoneOfficer = {
+  name: string;
+  zone: string;
+  role: string;
+};
+
+export async function getZoneOfficers(): Promise<SanityZoneOfficer[]> {
   return client.fetch(
-    `*[_type == "person" && board == "trustees" && trusteeType == "appointee"] | order(order asc) {
+    `*[_type == "zoneOfficer"] | order(zone asc, order asc) {
       name,
-      bio,
-      inMemoriam,
-      "photo": photo.asset->url
+      zone,
+      role
+    }`,
+    {},
+    CACHE
+  );
+}
+
+export async function getAppointees(): Promise<SanityTrustee[]> {
+  return client.fetch(
+    `*[_type == "person" && board == "trustees" && trusteeType == "appointee" && inMemoriam != true] | order(order asc) {
+      name
     }`,
     {},
     CACHE

@@ -1,19 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
+import HistoryExpander from "@/components/about/HistoryExpander";
 
 /**
- * About page — redesigned to match the institutional light treatment
- * established by the membership pages.
- *
- * Pattern: maroon header band → alternating white/#FAFAF8 body sections.
- * No dark surfaces, no atmospheric overlays.
+ * About page
  *
  * Sections:
- *   1. Page header  — maroon band, title, standfirst
- *   2. History      — white, prose left + captioned image right
- *   3. Mission      — #FAFAF8, image left + text right
- *   4. Vision       — white, text left + image right
- *   5. CTA strip    — maroon, membership invitation
+ *   1. Page header  — maroon band (unchanged)
+ *   2. History      — full-width heading, then prose + sticky image
+ *   3. Objects      — full-width heading, then two-column item grid
+ *   4. Strategies   — full-width heading, then clean numbered list
+ *   5. CTA strip    — maroon (unchanged)
  */
 
 export default function AboutOverview() {
@@ -21,7 +18,7 @@ export default function AboutOverview() {
     <div style={{ backgroundColor: "#FFFFFF" }}>
 
       {/* ================================================================
-       *  1. PAGE HEADER BAND
+       *  1. PAGE HEADER BAND — DO NOT MODIFY
        * ================================================================ */}
       <section
         style={{
@@ -45,7 +42,6 @@ export default function AboutOverview() {
           >
             About the Guild
           </h1>
-
           <p
             style={{
               fontFamily: "var(--font-montserrat)",
@@ -56,16 +52,24 @@ export default function AboutOverview() {
               maxWidth: "620px",
             }}
           >
-            The Guild of Organists of Nigeria is the foremost body representing
-            organists and organ music across Nigeria, committed to excellence,
-            education, and the sacred tradition of the instrument.
+            The Guild of Organists of Nigeria is the foremost professional body
+            representing organists and choral directors across Nigeria, dedicated
+            to the promotion and advancement of organ music and choral practice
+            at the highest standards of competence and artistry.
           </p>
         </div>
       </section>
 
       {/* ================================================================
        *  2. HISTORY
-       *  Prose left, captioned image right.
+       *
+       *  Heading row spans full width so it anchors the section cleanly.
+       *  Below it: prose left + sticky image right. The image stays in
+       *  view as the reader scrolls through the long narrative — this is
+       *  the standard editorial pattern for long-form text with a single
+       *  accompanying photo.
+       *
+       *  Image hidden on mobile (prose runs full width there).
        * ================================================================ */}
       <section
         style={{
@@ -77,93 +81,59 @@ export default function AboutOverview() {
           borderBottom: "1px solid #E8E0D0",
         }}
       >
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+        {/* Full-width section heading */}
+        <div
+          className="flex flex-col gap-3"
+          style={{
+            marginBottom: "clamp(36px, 4vw, 56px)",
+            paddingBottom: "clamp(28px, 3vw, 40px)",
+            borderBottom: "1px solid #E8E0D0",
+          }}
+        >
+          <span
+            style={{
+              fontFamily: "var(--font-montserrat)",
+              color: "var(--color-navbar)",
+              fontSize: "11px",
+              fontWeight: 700,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+            }}
+          >
+            Our History
+          </span>
+          <h2
+            className="font-heading"
+            style={{
+              color: "var(--color-text-dark)",
+              fontSize: "clamp(28px, 3.5vw, 46px)",
+              lineHeight: 1.08,
+            }}
+          >
+            History of the Guild of Organists of Nigeria
+          </h2>
+        </div>
+
+        {/* Two-column body: prose left, sticky image right */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-20 items-start">
 
           {/* Prose */}
-          <div className="flex flex-col gap-8">
-            <div className="flex flex-col gap-3">
-              <span
-                style={{
-                  fontFamily: "var(--font-montserrat)",
-                  color: "var(--color-navbar)",
-                  fontSize: "11px",
-                  fontWeight: 700,
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                }}
-              >
-                Our History
-              </span>
-              <h2
-                className="font-heading"
-                style={{
-                  color: "var(--color-text-dark)",
-                  fontSize: "clamp(26px, 3vw, 40px)",
-                }}
-              >
-                A legacy rooted in sacred music
-              </h2>
-            </div>
-
-            <div className="flex flex-col gap-6">
-              <p
-  
-                style={{
-                  fontFamily: "var(--font-montserrat)",
-                  color: "var(--color-text-dark)",
-                  fontSize: "17px",
-                  lineHeight: 1.85,
-                  opacity: 0.75,
-                }}
-              >
-                The Guild of Organists of Nigeria was founded with a singular
-                purpose: to bring together the scattered community of organists
-                across the nation under one distinguished body. From its
-                earliest gatherings in Lagos, the Guild drew musicians from
-                cathedrals, parishes, and concert halls who shared a deep
-                reverence for the pipe organ and its sacred heritage.
-              </p>
-              <p
-  
-                style={{
-                  fontFamily: "var(--font-montserrat)",
-                  color: "var(--color-text-dark)",
-                  fontSize: "17px",
-                  lineHeight: 1.85,
-                  opacity: 0.75,
-                }}
-              >
-                Through decades of dedication, the Guild established itself as
-                the authoritative voice on organ music in Nigeria, forging
-                relationships with international bodies, training generations of
-                organists, and championing the restoration and installation of
-                organs in worship spaces across the country.
-              </p>
-              <p
-                style={{
-                  fontFamily: "var(--font-montserrat)",
-                  color: "var(--color-text-dark)",
-                  fontSize: "17px",
-                  lineHeight: 1.85,
-                  opacity: 0.75,
-                }}
-              >
-                Today it stands as a custodian of that tradition, embracing new
-                voices while honouring the discipline and artistry that have
-                defined organ music for centuries.
-              </p>
-            </div>
+          <div className="lg:col-span-7">
+            <HistoryExpander />
           </div>
 
-          {/* Captioned image */}
-          <div className="flex flex-col gap-0">
+          {/* Sticky image — hidden on mobile */}
+          <div
+            className="hidden lg:flex lg:col-span-5 flex-col gap-0"
+            style={{ position: "sticky", top: "112px", alignSelf: "flex-start" }}
+          >
             <div
               className="relative overflow-hidden"
-              style={{ height: "clamp(300px, 38vw, 520px)" }}
+              style={{ height: "clamp(340px, 38vw, 520px)" }}
             >
               <Image
                 src="/images/about-guild.webp"
-                alt="Early Guild gathering"
+                alt="Guild of Organists of Nigeria"
                 fill
                 className="object-cover object-center"
               />
@@ -178,7 +148,7 @@ export default function AboutOverview() {
                   letterSpacing: "0.04em",
                 }}
               >
-                Early Guild gathering, Lagos, circa 1980s
+                Inauguration, Cathedral Church of Christ, Lagos, March 2014
               </p>
             </div>
           </div>
@@ -186,8 +156,12 @@ export default function AboutOverview() {
       </section>
 
       {/* ================================================================
-       *  3. MISSION
-       *  Image left, text right — light grey background for variety.
+       *  3. OBJECTS OF THE GUILD
+       *
+       *  Full-width heading row, then a two-column grid of the six
+       *  CAC-registered objects. Each item: large decorative letter +
+       *  text. Two columns fill the section width on desktop and stack
+       *  to a single column on mobile.
        * ================================================================ */}
       <section
         style={{
@@ -199,122 +173,109 @@ export default function AboutOverview() {
           borderBottom: "1px solid #E8E0D0",
         }}
       >
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
-
-          {/* Image */}
-          <div className="lg:col-span-5 flex flex-col gap-0">
-            <div
-              className="relative overflow-hidden"
-              style={{ height: "clamp(260px, 32vw, 460px)" }}
-            >
-              <Image
-                src="/images/about-guild.webp"
-                alt="Guild mission"
-                fill
-                className="object-cover object-center"
-              />
-            </div>
-            <div style={{ backgroundColor: "var(--color-navbar)", padding: "14px 20px" }}>
-              <p
-                style={{
-                  fontFamily: "var(--font-montserrat)",
-                  color: "var(--color-nav-text)",
-                  fontSize: "12px",
-                  opacity: 0.65,
-                  letterSpacing: "0.04em",
-                }}
-              >
-                Guild recital, Lagos
-              </p>
-            </div>
-          </div>
-
-          {/* Text */}
-          <div className="lg:col-span-7 flex flex-col gap-6">
-            <span
-              style={{
-                fontFamily: "var(--font-montserrat)",
-                color: "var(--color-navbar)",
-                fontSize: "11px",
-                fontWeight: 700,
-                letterSpacing: "0.18em",
-                textTransform: "uppercase",
-              }}
-            >
-              Our Mission
-            </span>
+        {/* Full-width section heading */}
+        <div
+          className="flex flex-col gap-3"
+          style={{
+            marginBottom: "clamp(36px, 4vw, 56px)",
+            paddingBottom: "clamp(28px, 3vw, 40px)",
+            borderBottom: "1px solid #E8E0D0",
+          }}
+        >
+          <span
+            style={{
+              fontFamily: "var(--font-montserrat)",
+              color: "var(--color-navbar)",
+              fontSize: "11px",
+              fontWeight: 700,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+            }}
+          >
+            Our Mission
+          </span>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-16 items-end">
             <h2
               className="font-heading"
               style={{
                 color: "var(--color-text-dark)",
-                fontSize: "clamp(26px, 3vw, 40px)",
+                fontSize: "clamp(28px, 3.5vw, 46px)",
+                lineHeight: 1.08,
               }}
             >
-              To promote, preserve, and advance the art of organ music in Nigeria
+              Objects of the Guild
             </h2>
             <p
-
               style={{
                 fontFamily: "var(--font-montserrat)",
                 color: "var(--color-text-dark)",
-                fontSize: "17px",
-                lineHeight: 1.85,
-                opacity: 0.75,
+                fontSize: "16px",
+                lineHeight: 1.75,
+                opacity: 0.65,
               }}
             >
-              The Guild exists to unite organists across Nigeria, provide
-              pathways for education and professional development, advocate for
-              the maintenance and installation of organs in worship and concert
-              spaces, and foster a culture of excellence in sacred and classical
-              music.
+              As registered with the Corporate Affairs Commission and forming
+              the formal purpose of the Guild.
             </p>
+          </div>
+        </div>
 
+        {/* Two-column grid of objects */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-16 gap-y-0">
+          {[
+            "To promote and advance the arts and practice of organ playing and choral directing and related activities to the highest standards of competence and artistry.",
+            "To increase the contributions of the organ and choral music to aesthetic and religious experiences, and to promote their understanding, appreciation, and enjoyment.",
+            "To set and maintain proper standards in such arts for the benefit of the public.",
+            "To educate musicians in such arts and practices, and improve the proficiency of organists and choral conductors.",
+            "To promote study and research in such arts and practices, and to provide members with opportunities to meet for discussion of professional topics.",
+            "To do all other such lawful things as will be required for the attainment of the above objects.",
+          ].map((object, index) => (
             <div
-              className="flex flex-col gap-4"
+              key={index}
+              className="flex items-start gap-5"
               style={{
-                paddingTop: "24px",
-                borderTop: "1px solid #E8E0D0",
+                paddingTop: "28px",
+                paddingBottom: "28px",
+                borderBottom: "1px solid #E8E0D0",
               }}
             >
-              {[
-                "Unite organists and supporters of organ music across all regions of Nigeria",
-                "Provide structured pathways for education and professional development",
-                "Advocate for the installation and maintenance of organs in worship spaces",
-                "Represent Nigeria in the international organ music community",
-              ].map((point) => (
-                <div key={point} className="flex items-start gap-3">
-                  <span
-                    style={{
-                      color: "var(--color-navbar)",
-                      fontWeight: 700,
-                      flexShrink: 0,
-                      marginTop: "2px",
-                      fontSize: "14px",
-                    }}
-                  >
-                    ·
-                  </span>
-                  <p
-                    style={{
-                      fontFamily: "var(--font-montserrat)",
-                      color: "var(--color-text-dark)",
-                      fontSize: "16px",
-                      lineHeight: 1.75,
-                      opacity: 0.7,
-                    }}
-                  >
-                    {point}
-                  </p>
-                </div>
-              ))}
+              <span
+                className="font-heading"
+                style={{
+                  color: "var(--color-navbar)",
+                  fontSize: "clamp(24px, 2.4vw, 34px)",
+                  lineHeight: 1,
+                  flexShrink: 0,
+                  paddingTop: "2px",
+                  opacity: 0.25,
+                  minWidth: "32px",
+                }}
+              >
+                {String.fromCharCode(96 + index + 1)}.
+              </span>
+              <p
+                style={{
+                  fontFamily: "var(--font-montserrat)",
+                  color: "var(--color-text-dark)",
+                  fontSize: "16px",
+                  lineHeight: 1.85,
+                  opacity: 0.75,
+                }}
+              >
+                {object}
+              </p>
             </div>
-          </div>
+          ))}
         </div>
       </section>
 
       {/* ================================================================
-       *  4. VISION
-       *  Text left, image right — back to white.
+       *  4. STRATEGIES
+       *
+       *  Full-width heading row, then a clean numbered list. No image —
+       *  the section carries its weight through the formal language alone.
+       *  A two-column split here would leave the list items too short;
+       *  a single authoritative column reads more seriously.
        * ================================================================ */}
       <section
         style={{
@@ -326,96 +287,105 @@ export default function AboutOverview() {
           borderBottom: "1px solid #E8E0D0",
         }}
       >
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-start">
-
-          {/* Text */}
-          <div className="lg:col-span-7 flex flex-col gap-6 order-2 lg:order-1">
-            <span
-              style={{
-                fontFamily: "var(--font-montserrat)",
-                color: "var(--color-navbar)",
-                fontSize: "11px",
-                fontWeight: 700,
-                letterSpacing: "0.18em",
-                textTransform: "uppercase",
-              }}
-            >
-              Our Vision
-            </span>
+        {/* Full-width section heading */}
+        <div
+          className="flex flex-col gap-3"
+          style={{
+            marginBottom: "clamp(36px, 4vw, 56px)",
+            paddingBottom: "clamp(28px, 3vw, 40px)",
+            borderBottom: "1px solid #E8E0D0",
+          }}
+        >
+          <span
+            style={{
+              fontFamily: "var(--font-montserrat)",
+              color: "var(--color-navbar)",
+              fontSize: "11px",
+              fontWeight: 700,
+              letterSpacing: "0.18em",
+              textTransform: "uppercase",
+            }}
+          >
+            Our Strategies
+          </span>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-16 items-end">
             <h2
               className="font-heading"
               style={{
                 color: "var(--color-text-dark)",
-                fontSize: "clamp(26px, 3vw, 40px)",
+                fontSize: "clamp(28px, 3.5vw, 46px)",
+                lineHeight: 1.08,
               }}
             >
-              A Nigeria where the organ resounds in every generation
+              Strategies
             </h2>
             <p
-
               style={{
                 fontFamily: "var(--font-montserrat)",
                 color: "var(--color-text-dark)",
-                fontSize: "17px",
-                lineHeight: 1.85,
-                opacity: 0.75,
+                fontSize: "16px",
+                lineHeight: 1.75,
+                opacity: 0.65,
               }}
             >
-              We envision a future where organ music is woven into the cultural
-              and spiritual fabric of Nigerian life. Skilled organists serving
-              in every region. Young musicians inspired and equipped. The sacred
-              voice of the organ continuing to elevate worship and concert life
-              for generations to come.
+              The Guild has adopted the following strategies for the
+              attainment of its objects.
             </p>
+          </div>
+        </div>
 
-            <Link
-              href="/membership"
-              className="font-nav flex items-center gap-3 hover:opacity-70 transition-opacity"
+        {/* Numbered strategy list */}
+        <div style={{ maxWidth: "900px" }}>
+          {[
+            "Develop music education, especially the art of organ playing and choral conducting, targeting schools and choral groups.",
+            "Organise regular recitals and concerts.",
+            "Own concert halls and instruments to provide unhindered access to facilities for development and performance.",
+            "Hold national and West African organ and choral festivals and competitions.",
+            "Hold open organ and choral concerts to widen appreciation of the organ as a civic instrument, not limited to churches and other places of worship.",
+          ].map((strategy, index) => (
+            <div
+              key={index}
+              className="grid grid-cols-12 gap-6 lg:gap-10 items-start"
               style={{
-                color: "var(--color-navbar)",
-                fontSize: "13px",
-                width: "fit-content",
-                borderBottom: "1px solid var(--color-navbar)",
-                paddingBottom: "3px",
-                marginTop: "8px",
+                paddingTop: "28px",
+                paddingBottom: "28px",
+                borderBottom: "1px solid #E8E0D0",
               }}
             >
-              Learn about membership
-            </Link>
-          </div>
-
-          {/* Image */}
-          <div className="lg:col-span-5 flex flex-col gap-0 order-1 lg:order-2">
-            <div
-              className="relative overflow-hidden"
-              style={{ height: "clamp(260px, 32vw, 460px)" }}
-            >
-              <Image
-                src="/images/about-guild.webp"
-                alt="The Guild's vision"
-                fill
-                className="object-cover object-center"
-              />
+              <div className="col-span-1 flex justify-end">
+                <span
+                  className="font-heading"
+                  style={{
+                    color: "var(--color-navbar)",
+                    fontSize: "clamp(24px, 2.4vw, 34px)",
+                    lineHeight: 1,
+                    opacity: 0.25,
+                    paddingTop: "2px",
+                  }}
+                >
+                  {index + 1}.
+                </span>
+              </div>
+              <div className="col-span-11">
+                <p
+                  style={{
+                    fontFamily: "var(--font-montserrat)",
+                    color: "var(--color-text-dark)",
+                    fontSize: "17px",
+                    lineHeight: 1.85,
+                    opacity: 0.75,
+                  }}
+                >
+                  {strategy}
+                </p>
+              </div>
             </div>
-            <div style={{ backgroundColor: "var(--color-navbar)", padding: "14px 20px" }}>
-              <p
-                style={{
-                  fontFamily: "var(--font-montserrat)",
-                  color: "var(--color-nav-text)",
-                  fontSize: "12px",
-                  opacity: 0.65,
-                  letterSpacing: "0.04em",
-                }}
-              >
-                Guild of Organists of Nigeria
-              </p>
-            </div>
-          </div>
+          ))}
         </div>
       </section>
 
       {/* ================================================================
-       *  5. CTA STRIP
+       *  5. CTA STRIP — DO NOT MODIFY
        * ================================================================ */}
       <section
         style={{
@@ -439,7 +409,6 @@ export default function AboutOverview() {
               Ready to become a part of the Guild?
             </h3>
             <p
-
               style={{
                 fontFamily: "var(--font-montserrat)",
                 color: "var(--color-nav-text)",

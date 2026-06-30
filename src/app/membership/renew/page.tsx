@@ -5,20 +5,23 @@ import Image from "next/image";
 import Link from "next/link";
 import { CONTACT_EMAIL } from "@/lib/constants";
 
-/**
- * Membership application form — institutional light treatment.
- *
- * Pattern: maroon header band → white form body.
- * Form style: clean, government-adjacent — generous labels, bordered inputs,
- * clear field groupings separated by ruled lines.
- *
- * Two states:
- *   idle    — the form is displayed
- *   success — personalised confirmation shown after submit
- *
- * No backend wired yet. When an API route is ready, replace the
- * handleSubmit body with a fetch() call to that endpoint.
- */
+type FormState = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  membershipNumber: string;
+  category: string;
+};
+
+const EMPTY_FORM: FormState = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  phone: "",
+  membershipNumber: "",
+  category: "",
+};
 
 const CATEGORIES = [
   { value: "regular", label: "Regular Membership", disabled: false },
@@ -27,30 +30,6 @@ const CATEGORIES = [
   { value: "student", label: "Student Member", disabled: false },
   { value: "affiliate", label: "Affiliate Member", disabled: false },
 ];
-
-type FormState = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  category: string;
-  institution: string;
-  role: string;
-  yearsPlaying: string;
-  notes: string;
-};
-
-const EMPTY_FORM: FormState = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  phone: "",
-  category: "",
-  institution: "",
-  role: "",
-  yearsPlaying: "",
-  notes: "",
-};
 
 const labelStyle: React.CSSProperties = {
   fontFamily: "var(--font-montserrat)",
@@ -76,16 +55,7 @@ const inputStyle: React.CSSProperties = {
   transition: "border-color 0.2s",
 };
 
-const hintStyle: React.CSSProperties = {
-  fontFamily: "var(--font-montserrat)",
-  color: "#1a0000",
-  fontSize: "13px",
-  opacity: 0.45,
-  marginTop: "6px",
-  lineHeight: 1.6,
-};
-
-export default function ApplyPage() {
+export default function RenewPage() {
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -96,11 +66,7 @@ export default function ApplyPage() {
 
   const set =
     (field: keyof FormState) =>
-    (
-      e: React.ChangeEvent<
-        HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-      >
-    ) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
       setForm((prev) => ({ ...prev, [field]: e.target.value }));
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -145,13 +111,13 @@ export default function ApplyPage() {
       if (!uploadRes.ok) throw new Error("Failed to upload photo");
       const { url: photoUrl } = await uploadRes.json();
 
-      const res = await fetch("/api/membership/apply", {
+      const res = await fetch("/api/membership/renew", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...form, photoUrl }),
       });
 
-      if (!res.ok) throw new Error("Failed to send application");
+      if (!res.ok) throw new Error("Failed to send renewal");
 
       setSubmitted(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -165,9 +131,7 @@ export default function ApplyPage() {
   return (
     <div style={{ backgroundColor: "#FFFFFF" }}>
 
-      {/* ================================================================
-       *  PAGE HEADER BAND — maroon, matches membership overview
-       * ================================================================ */}
+      {/* Header band */}
       <section
         style={{
           backgroundColor: "var(--color-navbar)",
@@ -188,7 +152,7 @@ export default function ApplyPage() {
               marginBottom: "16px",
             }}
           >
-            Application for Membership
+            Membership Renewal
           </h1>
 
           <p
@@ -201,16 +165,13 @@ export default function ApplyPage() {
               maxWidth: "580px",
             }}
           >
-            Please complete all fields as accurately as possible. Applications
-            are reviewed by the membership committee and you will be contacted
-            within 10 working days.
+            Renew your membership by completing the form below. Please have your
+            membership number ready.
           </p>
         </div>
       </section>
 
-      {/* ================================================================
-       *  FORM / CONFIRMATION — white body
-       * ================================================================ */}
+      {/* Form / Confirmation */}
       <section
         style={{
           backgroundColor: "#FAFAF8",
@@ -222,7 +183,6 @@ export default function ApplyPage() {
       >
         {submitted ? (
 
-          /* ── Confirmation ── */
           <div
             className="flex flex-col gap-8"
             style={{
@@ -240,7 +200,7 @@ export default function ApplyPage() {
                   fontSize: "clamp(24px, 3vw, 34px)",
                 }}
               >
-                Application received
+                Renewal submitted
               </h2>
               <p
                 style={{
@@ -251,14 +211,10 @@ export default function ApplyPage() {
                   opacity: 0.75,
                 }}
               >
-                Thank you, {form.firstName}. Your application for{" "}
-                <strong>
-                  {CATEGORIES.find((c) => c.value === form.category)?.label ??
-                    "membership"}
-                </strong>{" "}
-                has been received. The membership committee will review it and
-                contact you at{" "}
-                <strong>{form.email}</strong> within 10 working days.
+                Thank you, {form.firstName}. Your renewal request for membership
+                number <strong>{form.membershipNumber}</strong> has been received.
+                You will be contacted at <strong>{form.email}</strong> to confirm
+                your renewal status.
               </p>
               <p
                 style={{
@@ -300,14 +256,13 @@ export default function ApplyPage() {
 
         ) : (
 
-          /* ── Application form ── */
           <form
             onSubmit={handleSubmit}
             className="flex flex-col gap-0"
             style={{ maxWidth: "760px" }}
           >
 
-            {/* ── Section 1: Personal Information ── */}
+            {/* Member Details */}
             <div
               className="flex flex-col gap-6"
               style={{
@@ -330,8 +285,23 @@ export default function ApplyPage() {
                   margin: 0,
                 }}
               >
-                Personal Information
+                Member Details
               </h2>
+
+              <div>
+                <label htmlFor="membershipNumber" style={labelStyle}>
+                  Membership Number <span style={{ color: "var(--color-navbar)" }}>*</span>
+                </label>
+                <input
+                  id="membershipNumber"
+                  type="text"
+                  required
+                  value={form.membershipNumber}
+                  onChange={set("membershipNumber")}
+                  style={inputStyle}
+                  placeholder="e.g. GON-2024-0051"
+                />
+              </div>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <div>
@@ -396,6 +366,28 @@ export default function ApplyPage() {
               </div>
 
               <div>
+                <label htmlFor="category" style={labelStyle}>
+                  Membership Category <span style={{ color: "var(--color-navbar)" }}>*</span>
+                </label>
+                <select
+                  id="category"
+                  required
+                  value={form.category}
+                  onChange={set("category")}
+                  style={{ ...inputStyle, cursor: "pointer" }}
+                >
+                  <option value="" disabled>
+                    Select your category
+                  </option>
+                  {CATEGORIES.map((cat) => (
+                    <option key={cat.value} value={cat.value} disabled={cat.disabled}>
+                      {cat.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
                 <label style={labelStyle}>
                   Passport Photograph <span style={{ color: "var(--color-navbar)" }}>*</span>
                 </label>
@@ -452,191 +444,14 @@ export default function ApplyPage() {
               </div>
             </div>
 
-            {/* ── Section 2: Membership Category ── */}
-            <div
-              className="flex flex-col gap-6"
-              style={{
-                backgroundColor: "#FFFFFF",
-                border: "1px solid #E8E0D0",
-                borderBottom: "none",
-                padding: "clamp(28px, 4vw, 44px)",
-              }}
-            >
-              <h2
-                style={{
-                  fontFamily: "var(--font-montserrat)",
-                  color: "var(--color-navbar)",
-                  fontSize: "11px",
-                  fontWeight: 700,
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  paddingBottom: "16px",
-                  borderBottom: "1px solid #E8E0D0",
-                  margin: 0,
-                }}
-              >
-                Membership Category
-              </h2>
-
-              <div>
-                <label htmlFor="category" style={labelStyle}>
-                  Category Applying For <span style={{ color: "var(--color-navbar)" }}>*</span>
-                </label>
-                <select
-                  id="category"
-                  required
-                  value={form.category}
-                  onChange={set("category")}
-                  style={{ ...inputStyle, cursor: "pointer" }}
-                >
-                  <option value="" disabled>
-                    Select a category
-                  </option>
-                  {CATEGORIES.map((cat) => (
-                    <option key={cat.value} value={cat.value} disabled={cat.disabled}>
-                      {cat.label}
-                    </option>
-                  ))}
-                </select>
-                <p style={hintStyle}>
-                  Not sure which category applies?{" "}
-                  <Link
-                    href="/membership"
-                    style={{
-                      color: "var(--color-navbar)",
-                      textDecoration: "underline",
-                      textUnderlineOffset: "3px",
-                    }}
-                  >
-                    Review the categories
-                  </Link>
-                </p>
-              </div>
-            </div>
-
-            {/* ── Section 3: Professional Background ── */}
-            <div
-              className="flex flex-col gap-6"
-              style={{
-                backgroundColor: "#FFFFFF",
-                border: "1px solid #E8E0D0",
-                borderBottom: "none",
-                padding: "clamp(28px, 4vw, 44px)",
-              }}
-            >
-              <h2
-                style={{
-                  fontFamily: "var(--font-montserrat)",
-                  color: "var(--color-navbar)",
-                  fontSize: "11px",
-                  fontWeight: 700,
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  paddingBottom: "16px",
-                  borderBottom: "1px solid #E8E0D0",
-                  margin: 0,
-                }}
-              >
-                Professional Background
-              </h2>
-
-              <div>
-                <label htmlFor="institution" style={labelStyle}>
-                  Church / Institution / School <span style={{ color: "var(--color-navbar)" }}>*</span>
-                </label>
-                <input
-                  id="institution"
-                  type="text"
-                  required
-                  value={form.institution}
-                  onChange={set("institution")}
-                  style={inputStyle}
-                  placeholder="e.g. Cathedral Church of Christ, Lagos"
-                />
-              </div>
-
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div>
-                  <label htmlFor="role" style={labelStyle}>
-                    Current Role <span style={{ color: "var(--color-navbar)" }}>*</span>
-                  </label>
-                  <input
-                    id="role"
-                    type="text"
-                    required
-                    value={form.role}
-                    onChange={set("role")}
-                    style={inputStyle}
-                    placeholder="e.g. Cathedral Organist"
-                  />
-                </div>
-                <div>
-                  <label htmlFor="yearsPlaying" style={labelStyle}>
-                    Years Playing / Studying
-                  </label>
-                  <input
-                    id="yearsPlaying"
-                    type="text"
-                    value={form.yearsPlaying}
-                    onChange={set("yearsPlaying")}
-                    style={inputStyle}
-                    placeholder="e.g. 12 years"
-                  />
-                </div>
-              </div>
-
-            </div>
-
-            {/* ── Section 4: Supporting Statement ── */}
-            <div
-              className="flex flex-col gap-6"
-              style={{
-                backgroundColor: "#FFFFFF",
-                border: "1px solid #E8E0D0",
-                padding: "clamp(28px, 4vw, 44px)",
-              }}
-            >
-              <h2
-                style={{
-                  fontFamily: "var(--font-montserrat)",
-                  color: "var(--color-navbar)",
-                  fontSize: "11px",
-                  fontWeight: 700,
-                  letterSpacing: "0.18em",
-                  textTransform: "uppercase",
-                  paddingBottom: "16px",
-                  borderBottom: "1px solid #E8E0D0",
-                  margin: 0,
-                }}
-              >
-                Supporting Statement
-              </h2>
-
-              <div>
-                <label htmlFor="notes" style={labelStyle}>
-                  Statement
-                </label>
-                <textarea
-                  id="notes"
-                  rows={6}
-                  value={form.notes}
-                  onChange={set("notes")}
-                  style={{
-                    ...inputStyle,
-                    resize: "vertical",
-                    lineHeight: 1.75,
-                    minHeight: "150px",
-                  }}
-                  placeholder="Briefly describe your connection to organ music and your reasons for wishing to join the Guild."
-                />
-              </div>
-            </div>
-
-            {/* ── Submission ── */}
+            {/* Submission */}
             <div
               className="flex flex-col gap-5"
               style={{
-                paddingTop: "32px",
+                backgroundColor: "#FFFFFF",
+                border: "1px solid #E8E0D0",
+                borderTop: "none",
+                padding: "clamp(28px, 4vw, 44px)",
               }}
             >
               <p
@@ -648,19 +463,8 @@ export default function ApplyPage() {
                   opacity: 0.5,
                 }}
               >
-                By submitting this application you confirm that the information
-                provided is accurate and that you agree to abide by the Guild's{" "}
-                <Link
-                  href="/terms"
-                  style={{
-                    color: "var(--color-navbar)",
-                    textDecoration: "underline",
-                    textUnderlineOffset: "3px",
-                  }}
-                >
-                  Terms of Service
-                </Link>
-                .
+                By submitting this renewal you confirm that the information
+                provided is accurate.
               </p>
 
               {error && (
@@ -694,7 +498,7 @@ export default function ApplyPage() {
                   opacity: submitting ? 0.6 : 1,
                 }}
               >
-                {submitting ? "Submitting..." : "Submit Application"}
+                {submitting ? "Submitting..." : "Submit Renewal"}
               </button>
             </div>
           </form>

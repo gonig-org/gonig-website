@@ -7,7 +7,7 @@ import {
   QUICK_LINKS,
   LEGAL_LINKS,
   CONTACT_EMAIL,
-  CONTACT_PHONE,
+  CONTACT_PHONES,
   CONTACT_ADDRESS,
 } from "@/lib/constants";
 
@@ -123,13 +123,16 @@ export default function Footer() {
             </p>
 
             <div className="flex flex-col gap-3">
-              <a
-                href={`tel:${CONTACT_PHONE}`}
-                className="font-body text-sm hover:opacity-70 transition-opacity"
-                style={{ color: "var(--color-nav-text)", opacity: 0.85 }}
-              >
-                {CONTACT_PHONE}
-              </a>
+              {CONTACT_PHONES.map((phone) => (
+                <a
+                  key={phone}
+                  href={`tel:${phone}`}
+                  className="font-body text-sm hover:opacity-70 transition-opacity"
+                  style={{ color: "var(--color-nav-text)", opacity: 0.85 }}
+                >
+                  {phone}
+                </a>
+              ))}
               <a
                 href={`mailto:${CONTACT_EMAIL}`}
                 className="font-body text-sm hover:opacity-70 transition-opacity"

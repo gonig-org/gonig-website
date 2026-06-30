@@ -81,7 +81,6 @@ export default function Home() {
 
             <div className="flex flex-col gap-5">
               <p
-
                 style={{
                   fontFamily: "var(--font-montserrat)",
                   color: "var(--color-text-dark)",
@@ -90,14 +89,14 @@ export default function Home() {
                   opacity: 0.78,
                 }}
               >
-                The Guild of Organists of Nigeria was founded to unite the
-                community of organists across the nation under one distinguished
-                body. From its earliest gatherings in Lagos, the Guild drew
-                musicians from cathedrals, parishes, and concert halls who shared
-                a deep reverence for the pipe organ and its sacred heritage.
+                The Guild of Organists of Nigeria traces its origins to 2008,
+                when a group of veteran organists and choirmasters recognised the
+                need for a body to unite their profession across the country.
+                Formally constituted by the Corporate Affairs Commission in
+                January 2012, the Guild was inaugurated in March 2014 at the
+                Cathedral Church of Christ, Lagos.
               </p>
               <p
-
                 style={{
                   fontFamily: "var(--font-montserrat)",
                   color: "var(--color-text-dark)",
@@ -106,10 +105,11 @@ export default function Home() {
                   opacity: 0.78,
                 }}
               >
-                Today it stands as a custodian of that tradition. The Guild
-                unites organists across every region, champions education at all
-                levels, and advocates for organs in worship and concert spaces
-                throughout Nigeria.
+                Since then, the Guild has grown from sixty founding members to
+                over three hundred, drawn from across Christian denominations,
+                regions, and the Nigerian diaspora. It remains the foremost body
+                for the promotion and advancement of organ music and choral
+                practice in Nigeria.
               </p>
             </div>
 

@@ -11,8 +11,8 @@
 
 export const SITE_NAME = "Guild of Organists of Nigeria";
 export const SITE_ABBREVIATION = "GONiG";
-export const CONTACT_EMAIL = "gonig@gmail.com";
-export const CONTACT_PHONE = "+2348062346580";
+export const CONTACT_EMAIL = "guildoforganistsofnigeria@gmail.com";
+export const CONTACT_PHONES = ["08022800278", "08175351417"];
 export const CONTACT_ADDRESS = {
   line1: "Plot 5, block 6, Sitec, off Town Planning way,",
   line2: "Satellite Town, Lagos, Nigeria",
@@ -32,6 +32,7 @@ export const NAV_ITEMS: NavItem[] = [
       { label: "National Executives", href: "/about/executives" },
       { label: "Board of Advisers", href: "/about/advisers" },
       { label: "Board of Trustees", href: "/about/trustees" },
+      { label: "Zone & Chapter Officers", href: "/about/zones" },
     ],
   },
   {
@@ -46,23 +47,21 @@ export const NAV_ITEMS: NavItem[] = [
   },
   {
     label: "Education",
-    href: "/education",
+    href: "#",
     children: [
-      { label: "Education Overview", href: "/education" },
       { label: "Programmes", href: "/education/programmes" },
       { label: "Mentorship", href: "/education/mentorship" },
-      { label: "Study Resources", href: "/education/resources" },
+      { label: "Training", href: "/education/training" },
+      { label: "Certification", href: "/education/certification" },
+      { label: "Workshops", href: "/education/workshops" },
     ],
   },
   {
     label: "Events",
     href: "/events",
     children: [
-      { label: "Events Overview", href: "/events" },
-      { label: "Conference", href: "/events/conference" },
-      { label: "Workshops", href: "/events/workshops" },
-      { label: "Competitions", href: "/events/competitions" },
-      { label: "Performances", href: "/events/performances" },
+      { label: "Forthcoming Events", href: "/events/forthcoming" },
+      { label: "Past Events", href: "/events/past" },
       { label: "Calendar", href: "/events/calendar" },
     ],
   },
@@ -72,8 +71,6 @@ export const NAV_ITEMS: NavItem[] = [
 
 export const TOP_BAR_LINKS = [
   { label: "Resources", href: "/resources" },
-  { label: "News", href: "/news" },
-  { label: "Media", href: "/media" },
   { label: "Contact", href: "/contact" },
 ];
 
