@@ -1,4 +1,3 @@
-import Link from "next/link";
 import EducationHeader from "@/components/education/EducationHeader";
 
 export default function Programmes() {
@@ -62,9 +61,9 @@ export default function Programmes() {
           >
             The 2026 National Programmes schedule is available to download below.
           </p>
-          <Link
-            href="/documents/2026-national-programmes.pdf"
-            target="_blank"
+          <a
+            href="/images/documents/gonig-programmes-for-2026.pdf"
+            download
             className="font-nav inline-flex items-center justify-center hover:opacity-85 transition-opacity"
             style={{
               backgroundColor: "var(--color-navbar)",
@@ -75,7 +74,7 @@ export default function Programmes() {
             }}
           >
             Download 2026 National Programmes
-          </Link>
+          </a>
         </div>
       </section>
     </div>
