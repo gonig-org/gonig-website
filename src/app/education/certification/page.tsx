@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import { CONTACT_EMAIL } from "@/lib/constants";
 import EducationHeader from "@/components/education/EducationHeader";
+
+export const metadata: Metadata = {
+  title: "Certification",
+  description: "Formal recognition of professional competence for organists and choral conductors in Nigeria.",
+};
 
 export default function Certification() {
   return (

@@ -2,6 +2,13 @@
  * Guild's channel. The ID is the part after "v=" in a YouTube URL, e.g.
  * https://www.youtube.com/watch?v=dQw4w9WgXcQ → ID is dQw4w9WgXcQ */
 
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Resources",
+  description: "Recordings, workshops, and educational videos from the Guild of Organists of Nigeria.",
+};
+
 type Video = {
   id: string;
   title: string;

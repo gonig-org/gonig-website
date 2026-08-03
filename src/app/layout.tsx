@@ -3,6 +3,7 @@ import { Inter, Playfair_Display, Montserrat } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { SITE_NAME, SITE_ABBREVIATION, SITE_DESCRIPTION, SITE_URL } from "@/lib/constants";
 
 /*
  * Font setup — three typefaces, each exposed as a CSS variable.
@@ -33,11 +34,33 @@ const montserrat = Montserrat({
 /* ---------- SEO metadata ---------- */
 
 export const metadata: Metadata = {
-  title: "Guild of Organists Nigeria | GONiG",
-  description: "The collective voice of organists across Nigeria.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: `${SITE_NAME} | ${SITE_ABBREVIATION}`,
+    template: `%s | ${SITE_ABBREVIATION}`,
+  },
+  description: SITE_DESCRIPTION,
   icons: {
     icon: "/images/gonig-logo.webp",
     apple: "/images/gonig-logo.webp",
+  },
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    title: `${SITE_NAME} | ${SITE_ABBREVIATION}`,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    images: [{ url: "/images/gonig-logo.webp", width: 512, height: 512, alt: SITE_NAME }],
+  },
+  twitter: {
+    card: "summary",
+    title: `${SITE_NAME} | ${SITE_ABBREVIATION}`,
+    description: SITE_DESCRIPTION,
+    images: ["/images/gonig-logo.webp"],
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 

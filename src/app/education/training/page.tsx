@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import EducationHeader from "@/components/education/EducationHeader";
+
+export const metadata: Metadata = {
+  title: "Training",
+  description:
+    "Equipping musicians with the technical, artistic, and leadership skills needed for excellence in organ performance and choral direction.",
+};
 
 export default function Training() {
   return (

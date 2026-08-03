@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
 import EducationHeader from "@/components/education/EducationHeader";
+
+export const metadata: Metadata = {
+  title: "Programmes",
+  description:
+    "Promoting excellence in organ playing, choral conducting, and sacred music through performance and educational outreach.",
+};
 
 export default function Programmes() {
   return (

@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { getEventBySlug } from "@/sanity/lib/queries";
@@ -8,6 +9,27 @@ export const revalidate = 60;
 type Props = {
   params: Promise<{ slug: string }>;
 };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const event = await getEventBySlug(slug);
+
+  if (!event) {
+    return { title: "Event Not Found" };
+  }
+
+  const description = event.standfirst ?? `${event.title} — a Guild of Organists of Nigeria event.`;
+
+  return {
+    title: event.title,
+    description,
+    openGraph: {
+      title: event.title,
+      description,
+      images: event.heroImage ? [{ url: event.heroImage }] : undefined,
+    },
+  };
+}
 
 function formatDate(iso: string): string {
   const [year, month, day] = iso.split("-").map(Number);

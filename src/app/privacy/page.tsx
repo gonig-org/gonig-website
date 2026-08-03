@@ -1,8 +1,14 @@
+import type { Metadata } from "next";
 import LegalPageLayout, {
   LegalSection,
   LegalParagraph,
 } from "@/components/shared/LegalPageLayout";
 import { CONTACT_EMAIL } from "@/lib/constants";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy",
+  description: "How the Guild of Organists of Nigeria collects, uses, and protects your personal information.",
+};
 
 export default function PrivacyPolicy() {
   return (

@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import { getZoneOfficers, type SanityZoneOfficer } from "@/sanity/lib/queries";
 
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  title: "Zone & Chapter Officers",
+  description: "Find Guild of Organists of Nigeria zone and chapter officers across the country.",
+};
 
 export default async function ZoneAndChapterOfficers() {
   const officers = await getZoneOfficers();

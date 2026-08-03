@@ -1,8 +1,14 @@
+import type { Metadata } from "next";
 import LegalPageLayout, {
   LegalSection,
   LegalParagraph,
 } from "@/components/shared/LegalPageLayout";
 import { CONTACT_EMAIL } from "@/lib/constants";
+
+export const metadata: Metadata = {
+  title: "Terms of Service",
+  description: "The terms governing use of the Guild of Organists of Nigeria website and services.",
+};
 
 export default function TermsOfService() {
   return (

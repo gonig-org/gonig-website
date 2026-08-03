@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import { getAdvisers, type SanityAdviser } from "@/sanity/lib/queries";
 
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  title: "Board of Advisers",
+  description: "Meet the Board of Advisers of the Guild of Organists of Nigeria.",
+};
 
 export default async function BoardOfAdvisers() {
   const advisers = await getAdvisers();

@@ -1,7 +1,13 @@
+import type { Metadata } from "next";
 import { getMembersDirectory } from "@/sanity/lib/queries";
 import MemberSearch from "./MemberSearch";
 
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  title: "Member Directory",
+  description: "Search the register of current and past members of the Guild of Organists of Nigeria.",
+};
 
 export default async function MemberDirectoryPage() {
   const members = await getMembersDirectory();

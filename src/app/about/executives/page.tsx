@@ -1,7 +1,13 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { getExecutives, type SanityPerson } from "@/sanity/lib/queries";
 
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  title: "National Executives",
+  description: "Meet the National Executives leading the Guild of Organists of Nigeria.",
+};
 
 function Monogram({ name }: { name: string }) {
   const initials = name

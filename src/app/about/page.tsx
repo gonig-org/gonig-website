@@ -1,6 +1,13 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import HistoryExpander from "@/components/about/HistoryExpander";
+
+export const metadata: Metadata = {
+  title: "About the Guild",
+  description:
+    "The history, mission, and objects of the Guild of Organists of Nigeria — the professional body promoting and preserving organ music across Nigeria.",
+};
 
 /**
  * About page

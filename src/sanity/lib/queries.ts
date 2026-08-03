@@ -102,6 +102,22 @@ export async function getForthcomingEvents(): Promise<SanityEventSummary[]> {
   );
 }
 
+export type SanityEventSitemapEntry = {
+  slug: string;
+  date: string;
+};
+
+export async function getAllEventSlugs(): Promise<SanityEventSitemapEntry[]> {
+  return client.fetch(
+    `*[_type == "event"] {
+      "slug": slug.current,
+      date
+    }`,
+    {},
+    CACHE
+  );
+}
+
 export async function getPastEvents(): Promise<SanityEventSummary[]> {
   const today = new Date().toISOString().split("T")[0];
   return client.fetch(

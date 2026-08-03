@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import {
   getFoundingTrustees,
   getAppointees,
@@ -5,6 +6,12 @@ import {
 } from "@/sanity/lib/queries";
 
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  title: "Board of Trustees",
+  description:
+    "Meet the founding and appointed Trustees of the Guild of Organists of Nigeria.",
+};
 
 export default async function BoardOfTrustees() {
   const [foundingTrustees, appointees] = await Promise.all([

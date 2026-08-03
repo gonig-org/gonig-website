@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { CONTACT_EMAIL } from "@/lib/constants";
+
+export const metadata: Metadata = {
+  title: "Membership",
+  description:
+    "Membership of the Guild of Organists of Nigeria — categories, benefits, and how to apply or renew.",
+};
 
 /**
  * Membership overview — styled as a proper institutional interior page.

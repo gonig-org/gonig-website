@@ -7,10 +7,19 @@
  * from these arrays.
  */
 
-/* ---------- Contact info (used in Footer + legal pages) ---------- */
+/* ---------- Site identity (used in metadata, sitemap, robots) ---------- */
 
 export const SITE_NAME = "Guild of Organists of Nigeria";
 export const SITE_ABBREVIATION = "GONiG";
+export const SITE_DESCRIPTION =
+  "GONiG is the registered professional body promoting, preserving, and advancing organ music across Nigeria and among Nigerians in the diaspora.";
+
+/** Canonical production URL, no trailing slash. Falls back to localhost in dev. */
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "http://localhost:3000";
+
+/* ---------- Contact info (used in Footer + legal pages) ---------- */
+
 export const CONTACT_EMAIL = "guildoforganistsofnigeria@gmail.com";
 export const CONTACT_PHONES = ["08022800278", "08175351417"];
 export const CONTACT_ADDRESS = {

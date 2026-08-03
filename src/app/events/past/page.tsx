@@ -1,8 +1,14 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { getPastEvents } from "@/sanity/lib/queries";
 
 export const revalidate = 60;
+
+export const metadata: Metadata = {
+  title: "Past Events",
+  description: "A record of past programmes, concerts, and Guild meetings held by the Guild of Organists of Nigeria.",
+};
 
 function formatDate(iso: string): string {
   const [year, month, day] = iso.split("-").map(Number);

@@ -21,11 +21,17 @@ function StatusLabel({ status }: { status: SanityMember["status"] }) {
   );
 }
 
+type StatusFilter = "All" | "Active" | "Inactive";
+
+const STATUS_FILTERS: StatusFilter[] = ["All", "Active", "Inactive"];
+
 export default function MemberSearch({ members }: { members: SanityMember[] }) {
   const [query, setQuery] = useState("");
   const [focused, setFocused] = useState(false);
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("All");
 
   const filtered = members.filter((m) => {
+    if (statusFilter !== "All" && m.status !== statusFilter) return false;
     const q = query.toLowerCase().trim();
     if (!q) return true;
     return (
@@ -48,39 +54,84 @@ export default function MemberSearch({ members }: { members: SanityMember[] }) {
         }}
       >
         <div style={{ maxWidth: "960px" }}>
-          <label htmlFor="member-search" className="sr-only">
-            Search members
-          </label>
-          <input
-            id="member-search"
-            type="search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search by name or membership number..."
-            onFocus={() => setFocused(true)}
-            onBlur={() => setFocused(false)}
-            style={{
-              width: "100%",
-              height: "52px",
-              padding: "0 20px",
-              fontFamily: "var(--font-montserrat)",
-              fontSize: "16px",
-              color: "var(--color-text-dark)",
-              backgroundColor: "#FFFFFF",
-              border: "1px solid #D8D0C0",
-              borderRadius: "2px",
-              outline: focused ? "2px solid var(--color-navbar)" : "none",
-              outlineOffset: focused ? "2px" : undefined,
-              boxSizing: "border-box",
-            }}
-          />
+          <div className="flex flex-col sm:flex-row sm:items-start" style={{ gap: "16px" }}>
+            <div className="w-full" style={{ maxWidth: "480px" }}>
+              <label htmlFor="member-search" className="sr-only">
+                Search members
+              </label>
+              <input
+                id="member-search"
+                type="search"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search by name or membership number..."
+                onFocus={() => setFocused(true)}
+                onBlur={() => setFocused(false)}
+                style={{
+                  width: "100%",
+                  height: "52px",
+                  padding: "0 20px",
+                  fontFamily: "var(--font-montserrat)",
+                  fontSize: "16px",
+                  color: "var(--color-text-dark)",
+                  backgroundColor: "#FFFFFF",
+                  border: "1px solid #D8D0C0",
+                  borderRadius: "2px",
+                  outline: focused ? "2px solid var(--color-navbar)" : "none",
+                  outlineOffset: focused ? "2px" : undefined,
+                  boxSizing: "border-box",
+                }}
+              />
+            </div>
+
+            {/* Status filter — segmented toggle */}
+            <div
+              role="group"
+              aria-label="Filter by membership status"
+              className="flex w-full sm:w-auto flex-shrink-0"
+              style={{
+                border: "1px solid #D8D0C0",
+                borderRadius: "2px",
+                overflow: "hidden",
+              }}
+            >
+              {STATUS_FILTERS.map((status) => {
+                const isSelected = statusFilter === status;
+                return (
+                  <button
+                    key={status}
+                    type="button"
+                    aria-pressed={isSelected}
+                    onClick={() => setStatusFilter(status)}
+                    className="flex-1 sm:flex-none"
+                    style={{
+                      minHeight: "52px",
+                      padding: "0 clamp(20px, 3vw, 32px)",
+                      fontFamily: "var(--font-montserrat)",
+                      fontSize: "15px",
+                      fontWeight: 600,
+                      color: isSelected ? "var(--color-nav-text)" : "var(--color-text-dark)",
+                      backgroundColor: isSelected ? "var(--color-navbar)" : "#FFFFFF",
+                      opacity: isSelected ? 1 : 0.75,
+                      border: "none",
+                      borderRight: status !== "Inactive" ? "1px solid #D8D0C0" : "none",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {status}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
           <p
             style={{
               fontFamily: "var(--font-montserrat)",
               fontSize: "13px",
               color: "var(--color-text-dark)",
               opacity: 0.7,
-              marginTop: "10px",
+              marginTop: "16px",
             }}
           >
             Showing {filtered.length} of {members.length} member{members.length !== 1 ? "s" : ""}

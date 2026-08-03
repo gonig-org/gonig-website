@@ -1,8 +1,14 @@
+import type { Metadata } from "next";
 import LegalPageLayout, {
   LegalSection,
   LegalParagraph,
 } from "@/components/shared/LegalPageLayout";
 import { CONTACT_EMAIL } from "@/lib/constants";
+
+export const metadata: Metadata = {
+  title: "Cookie Policy",
+  description: "How the Guild of Organists of Nigeria uses cookies on this website.",
+};
 
 export default function CookiePolicy() {
   return (

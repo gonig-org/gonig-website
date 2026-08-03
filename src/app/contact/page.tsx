@@ -1,8 +1,14 @@
+import type { Metadata } from "next";
 import {
   CONTACT_EMAIL,
   CONTACT_PHONES,
   CONTACT_ADDRESS,
 } from "@/lib/constants";
+
+export const metadata: Metadata = {
+  title: "Contact Us",
+  description: "Get in touch with the Guild of Organists of Nigeria — membership, events, and general enquiries.",
+};
 
 /**
  * Contact page.

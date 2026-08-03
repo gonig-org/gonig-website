@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
 import { CONTACT_EMAIL } from "@/lib/constants";
 import EducationHeader from "@/components/education/EducationHeader";
+
+export const metadata: Metadata = {
+  title: "Mentorship",
+  description:
+    "Nurturing the next generation of organists, choral conductors, and church musicians through structured guidance and peer learning.",
+};
 
 export default function Mentorship() {
   return (

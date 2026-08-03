@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
 import { CONTACT_EMAIL } from "@/lib/constants";
 import EducationHeader from "@/components/education/EducationHeader";
+
+export const metadata: Metadata = {
+  title: "Workshops",
+  description:
+    "Practical, focused sessions designed to sharpen musicianship and deepen knowledge of organ and choral practice.",
+};
 
 export default function Workshops() {
   return (
