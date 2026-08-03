@@ -5,6 +5,32 @@ const CACHE = { next: { revalidate: 60 } };
 
 /* ── Types ── */
 
+export type SanityHeroEvent = {
+  title: string;
+  slug: string;
+  date: string;
+  standfirst: string | null;
+  heroImage: string | null;
+};
+
+export type SanityEventDetail = {
+  title: string;
+  slug: string;
+  date: string;
+  standfirst: string | null;
+  writeup: string | null;
+  heroImage: string | null;
+  gallery: { url: string; caption: string | null }[];
+};
+
+export type SanityEventSummary = {
+  title: string;
+  slug: string;
+  date: string;
+  standfirst: string | null;
+  heroImage: string | null;
+};
+
 export type SanityMember = {
   membershipNo: string;
   fullName: string;
@@ -27,6 +53,69 @@ export type SanityTrustee = {
 };
 
 /* ── Queries ── */
+
+export async function getHeroEvents(): Promise<SanityHeroEvent[]> {
+  return client.fetch(
+    `*[_type == "event" && showInHero == true] | order(heroOrder asc) {
+      title,
+      "slug": slug.current,
+      date,
+      standfirst,
+      "heroImage": heroImage.asset->url
+    }`,
+    {},
+    CACHE
+  );
+}
+
+export async function getEventBySlug(slug: string): Promise<SanityEventDetail | null> {
+  return client.fetch(
+    `*[_type == "event" && slug.current == $slug][0] {
+      title,
+      "slug": slug.current,
+      date,
+      standfirst,
+      writeup,
+      "heroImage": heroImage.asset->url,
+      "gallery": gallery[]{
+        "url": asset->url,
+        caption
+      }
+    }`,
+    { slug },
+    CACHE
+  );
+}
+
+export async function getForthcomingEvents(): Promise<SanityEventSummary[]> {
+  const today = new Date().toISOString().split("T")[0];
+  return client.fetch(
+    `*[_type == "event" && date >= $today] | order(date asc) {
+      title,
+      "slug": slug.current,
+      date,
+      standfirst,
+      "heroImage": heroImage.asset->url
+    }`,
+    { today },
+    CACHE
+  );
+}
+
+export async function getPastEvents(): Promise<SanityEventSummary[]> {
+  const today = new Date().toISOString().split("T")[0];
+  return client.fetch(
+    `*[_type == "event" && date < $today] | order(date desc) {
+      title,
+      "slug": slug.current,
+      date,
+      standfirst,
+      "heroImage": heroImage.asset->url
+    }`,
+    { today },
+    CACHE
+  );
+}
 
 export async function getMembersDirectory(): Promise<SanityMember[]> {
   return client.fetch(

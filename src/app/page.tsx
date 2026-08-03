@@ -2,6 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { CONTACT_EMAIL } from "@/lib/constants";
 import HeroSlider from "@/components/home/HeroSlider";
+import { getHeroEvents } from "@/sanity/lib/queries";
+
+export const revalidate = 60;
 
 /**
  * Home page — the main landing experience for GONiG.
@@ -17,7 +20,9 @@ import HeroSlider from "@/components/home/HeroSlider";
  *   - Buttons have generous padding for easy tap/click targets
  */
 
-export default function Home() {
+export default async function Home() {
+  const heroEvents = await getHeroEvents();
+
   return (
     <div style={{ backgroundColor: "#000000" }}>
 
@@ -27,7 +32,7 @@ export default function Home() {
        *  It is extracted to keep this server component clean.
        *  See src/components/home/HeroSlider.tsx for full implementation.
        * ================================================================ */}
-      <HeroSlider />
+      {heroEvents.length > 0 && <HeroSlider events={heroEvents} />}
 
       {/* ================================================================
        *  2. ABOUT THE GUILD

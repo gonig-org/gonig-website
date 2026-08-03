@@ -10,48 +10,30 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
  * Hero event slider — the primary entry point of the GONiG home page.
  *
  * Each slide: full-bleed event image + date + title + "Learn More" link.
+ * Events are fetched server-side in page.tsx and passed in as props.
  *
  * Behaviour:
- *   Desktop — auto-advances every 6 seconds. A thin progress bar along
- *             the bottom of each tab shows how long until the next slide,
- *             making the automation visible and legible. Large side arrows
- *             let any user take manual control at any time. Hovering the
- *             hero pauses auto-advance.
- *   Mobile  — manual only. Large prev/next arrow buttons + "01 / 03"
- *             counter. Auto-advance is off — small screens are typically
- *             held in hand and users expect to control scrolling themselves.
- *
- * TODO: replace `events` array with Sanity CMS fetch when CMS is wired up.
- *       Pass events in as a prop — no other changes needed in this component.
+ *   Desktop — auto-advances every 6 seconds, with a thin progress bar.
+ *   Mobile  — manual only (prev/next arrows + slide counter).
  */
 
-const SLIDE_DURATION = 6000; // ms per slide on desktop auto-advance
+const SLIDE_DURATION = 6000;
 
-const events = [
-  {
-    id: "01",
-    date: "February 9, 2026",
-    title: "Dedication of New Appointees",
-    image: "/images/hero-dedication.webp",
-    href: "#",
-  },
-  {
-    id: "02",
-    date: "March 15, 2026",
-    title: "Annual Organ Recital Series",
-    image: "/images/hero-recital.webp",
-    href: "#",
-  },
-  {
-    id: "03",
-    date: "April 3, 2026",
-    title: "GONiG Conference — Lagos",
-    image: "/images/hero-conference.webp",
-    href: "#",
-  },
-];
+type HeroEvent = {
+  title: string;
+  slug: string;
+  date: string;       // ISO date string: "YYYY-MM-DD"
+  standfirst: string | null;
+  heroImage: string | null;
+};
 
-export default function HeroSlider() {
+function formatDate(iso: string): string {
+  const [year, month, day] = iso.split("-").map(Number);
+  const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  return `${months[month - 1]} ${day}, ${year}`;
+}
+
+export default function HeroSlider({ events }: { events: HeroEvent[] }) {
   const [current, setCurrent] = useState(0);
   const [progress, setProgress] = useState(0); // 0–100, drives the tab progress bar
 
@@ -61,7 +43,10 @@ export default function HeroSlider() {
   }, []);
 
   const prev = () => goTo(current === 0 ? events.length - 1 : current - 1);
-  const next = useCallback(() => goTo(current === events.length - 1 ? 0 : current + 1), [current, goTo]);
+  const next = useCallback(
+    () => goTo(current === events.length - 1 ? 0 : current + 1),
+    [current, events.length, goTo]
+  );
 
   // Auto-advance — always running, never paused by hover
   useEffect(() => {
@@ -95,7 +80,7 @@ export default function HeroSlider() {
       {/* ── Background image — crossfades between slides ── */}
       <AnimatePresence initial={false}>
         <motion.div
-          key={event.image}
+          key={event.heroImage ?? event.title}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -103,13 +88,15 @@ export default function HeroSlider() {
           className="absolute inset-0"
           style={{ zIndex: 0 }}
         >
-          <Image
-            src={event.image}
-            alt={event.title}
-            fill
-            priority
-            className="object-cover object-center"
-          />
+          {event.heroImage && (
+            <Image
+              src={event.heroImage}
+              alt={event.title}
+              fill
+              priority
+              className="object-cover object-center"
+            />
+          )}
         </motion.div>
       </AnimatePresence>
 
@@ -169,7 +156,7 @@ export default function HeroSlider() {
                     opacity: 0.85,
                   }}
                 >
-                  {event.date}
+                  {formatDate(event.date)}
                 </span>
               </div>
 
@@ -189,7 +176,7 @@ export default function HeroSlider() {
 
               {/* CTA */}
               <Link
-                href={event.href}
+                href={`/events/${event.slug}`}
                 className="inline-flex items-center gap-3 hover:opacity-75 transition-opacity"
                 style={{
                   fontFamily: "var(--font-montserrat)",
