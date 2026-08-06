@@ -9,7 +9,13 @@ const client = createClient({
   useCdn: false,
 });
 
+const UPLOAD_SECRET = process.env.UPLOAD_SECRET;
+
 export async function POST(request: Request) {
+  if (!UPLOAD_SECRET || request.headers.get("x-upload-secret") !== UPLOAD_SECRET) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File | null;

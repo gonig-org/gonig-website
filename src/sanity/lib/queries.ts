@@ -87,20 +87,6 @@ export async function getEventBySlug(slug: string): Promise<SanityEventDetail | 
   );
 }
 
-export async function getForthcomingEvents(): Promise<SanityEventSummary[]> {
-  const today = new Date().toISOString().split("T")[0];
-  return client.fetch(
-    `*[_type == "event" && date >= $today] | order(date asc) {
-      title,
-      "slug": slug.current,
-      date,
-      standfirst,
-      "heroImage": heroImage.asset->url
-    }`,
-    { today },
-    CACHE
-  );
-}
 
 export type SanityEventSitemapEntry = {
   slug: string;

@@ -1,7 +1,3 @@
-/* Replace the VIDEO_ID strings below with the YouTube video IDs from the
- * Guild's channel. The ID is the part after "v=" in a YouTube URL, e.g.
- * https://www.youtube.com/watch?v=dQw4w9WgXcQ → ID is dQw4w9WgXcQ */
-
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -25,12 +21,10 @@ const VIDEOS: Video[] = [
     title: "Quarterly Meeting and Workshop: Hymn Leadership and Registration",
   },
   {
-    // TODO: confirm title with client — YouTube shows generic "Live broadcast"
     id: "k6VmN59kdaA",
     title: "GONiG Live Broadcast",
   },
   {
-    // TODO: confirm title with client — YouTube shows generic "Live broadcast"
     id: "yj4RuQBsP8o",
     title: "GONiG Live Broadcast",
   },

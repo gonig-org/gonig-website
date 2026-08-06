@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { CONTACT_EMAIL } from "@/lib/constants";
 import HeroSlider from "@/components/home/HeroSlider";
+import DonationBlock from "@/components/home/DonationBlock";
 import { getHeroEvents } from "@/sanity/lib/queries";
 
 export const revalidate = 60;
@@ -301,6 +302,14 @@ export default async function Home() {
           </div>
         </div>
       </section>
+
+      {/* ================================================================
+       *  4. DONATION
+       *
+       *  Institutional ask — not a charity bucket, not a SaaS upsell.
+       *  Three preset amounts plus a custom input. Wired to Paystack.
+       * ================================================================ */}
+      <DonationBlock />
 
     </div>
   );
