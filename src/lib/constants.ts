@@ -67,7 +67,7 @@ export const NAV_ITEMS: NavItem[] = [
   },
   {
     label: "Events",
-    href: "/events",
+    href: "/events/forthcoming",
     children: [
       { label: "Forthcoming Events", href: "/events/forthcoming" },
       { label: "Past Events", href: "/events/past" },
@@ -87,18 +87,10 @@ export const TOP_BAR_LINKS = [
 
 export const QUICK_LINKS = [
   { label: "About Us", href: "/about" },
-  { label: "News", href: "/news" },
   { label: "Membership", href: "/membership" },
-  { label: "Education", href: "/education" },
-  { label: "Shop", href: "/shop" },
-  { label: "Contribute", href: "/support" },
-  { label: "Blog", href: "/blog" },
-];
-
-export const SOCIAL_LINKS = [
-  { label: "Facebook", href: "https://facebook.com" },
-  { label: "Twitter/X", href: "https://twitter.com" },
-  { label: "Youtube", href: "https://youtube.com" },
+  { label: "Events", href: "/events/forthcoming" },
+  { label: "Resources", href: "/resources" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export const LEGAL_LINKS = [

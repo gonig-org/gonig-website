@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Youtube, Twitter, Facebook } from "lucide-react";
+import { Youtube, Facebook } from "lucide-react";
 import { TOP_BAR_LINKS } from "@/lib/constants";
 
 /**
@@ -12,7 +12,6 @@ import { TOP_BAR_LINKS } from "@/lib/constants";
 
 const socialLinks = [
   { icon: Youtube, href: "https://www.youtube.com/@guildoforganistsofnigeria2014", label: "YouTube" },
-  { icon: Twitter, href: "https://twitter.com", label: "X (Twitter)" },
   { icon: Facebook, href: "https://www.facebook.com/Guildoforganistsofnigeria", label: "Facebook" },
 ];
 

@@ -105,33 +105,32 @@ export default async function PastEventsPage() {
               <Link
                 key={event.slug}
                 href={`/events/${event.slug}`}
-                className="group flex flex-col lg:flex-row gap-6 lg:gap-10 items-start hover:opacity-90 transition-opacity"
+                className="group"
                 style={{
-                  paddingTop: "clamp(32px, 4vw, 48px)",
-                  paddingBottom: "clamp(32px, 4vw, 48px)",
-                  borderTop: i === 0 ? "1px solid rgba(26,0,0,0.12)" : undefined,
-                  borderBottom: "1px solid rgba(26,0,0,0.12)",
+                  display: "flex",
+                  alignItems: "stretch",
+                  gap: "0",
+                  paddingTop: "clamp(28px, 4vw, 44px)",
+                  paddingBottom: "clamp(28px, 4vw, 44px)",
+                  borderBottom: "1px solid rgba(26,0,0,0.10)",
                   textDecoration: "none",
                 }}
               >
-                {/* Thumbnail */}
-                {event.heroImage && (
-                  <div
-                    className="hidden lg:block relative flex-shrink-0 overflow-hidden"
-                    style={{ width: "200px", height: "134px" }}
-                  >
-                    <Image
-                      src={event.heroImage}
-                      alt={event.title}
-                      fill
-                      className="object-cover object-center"
-                      sizes="200px"
-                    />
-                  </div>
-                )}
+                {/* Left accent bar — always present, structural anchor */}
+                <div
+                  style={{
+                    width: "3px",
+                    flexShrink: 0,
+                    backgroundColor: "var(--color-navbar)",
+                    marginRight: "28px",
+                    opacity: 0.18,
+                    transition: "opacity 0.2s",
+                  }}
+                  className="group-hover:opacity-60"
+                />
 
-                {/* Text */}
-                <div className="flex flex-col gap-3">
+                {/* Text — always full, never depends on image */}
+                <div className="flex flex-col gap-2 flex-1" style={{ minWidth: 0 }}>
                   <p
                     style={{
                       fontFamily: "var(--font-montserrat)",
@@ -140,7 +139,7 @@ export default async function PastEventsPage() {
                       fontWeight: 700,
                       letterSpacing: "0.12em",
                       textTransform: "uppercase",
-                      opacity: 0.75,
+                      opacity: 0.65,
                     }}
                   >
                     {formatDate(event.date)}
@@ -149,7 +148,7 @@ export default async function PastEventsPage() {
                     className="font-heading"
                     style={{
                       color: "var(--color-text-dark)",
-                      fontSize: "clamp(20px, 2vw, 26px)",
+                      fontSize: "clamp(18px, 2vw, 26px)",
                       lineHeight: 1.15,
                     }}
                   >
@@ -162,7 +161,8 @@ export default async function PastEventsPage() {
                         color: "var(--color-text-dark)",
                         fontSize: "16px",
                         lineHeight: 1.75,
-                        opacity: 0.7,
+                        opacity: 0.62,
+                        marginTop: "4px",
                       }}
                     >
                       {event.standfirst}
@@ -172,15 +172,32 @@ export default async function PastEventsPage() {
                     style={{
                       fontFamily: "var(--font-montserrat)",
                       color: "var(--color-navbar)",
-                      fontSize: "13px",
+                      fontSize: "12px",
                       fontWeight: 600,
                       letterSpacing: "0.08em",
-                      marginTop: "4px",
+                      marginTop: "6px",
+                      opacity: 0.7,
                     }}
                   >
-                    View gallery &rarr;
+                    Read more &rarr;
                   </span>
                 </div>
+
+                {/* Thumbnail — bonus where it exists, never structural */}
+                {event.heroImage && (
+                  <div
+                    className="hidden lg:block relative shrink-0 overflow-hidden"
+                    style={{ width: "180px", height: "120px", marginLeft: "32px" }}
+                  >
+                    <Image
+                      src={event.heroImage}
+                      alt={event.title}
+                      fill
+                      className="object-cover object-center"
+                      sizes="180px"
+                    />
+                  </div>
+                )}
               </Link>
             ))}
           </div>

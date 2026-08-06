@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Youtube, Twitter, Facebook } from "lucide-react";
+import { Youtube, Facebook } from "lucide-react";
 import {
   QUICK_LINKS,
   LEGAL_LINKS,
@@ -29,7 +29,6 @@ import {
 
 const socialLinks = [
   { icon: Youtube, href: "https://www.youtube.com/@guildoforganistsofnigeria2014", label: "YouTube" },
-  { icon: Twitter, href: "https://twitter.com", label: "X (Twitter)" },
   { icon: Facebook, href: "https://www.facebook.com/Guildoforganistsofnigeria", label: "Facebook" },
 ];
 

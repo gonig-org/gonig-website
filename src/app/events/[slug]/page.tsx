@@ -47,7 +47,7 @@ export default async function EventDetailPage({ params }: Props) {
   if (!event) notFound();
 
   return (
-    <div style={{ backgroundColor: "#FFFFFF" }}>
+    <div style={{ backgroundColor: "#FFFFFF", overflowX: "hidden", width: "100%" }}>
 
       {/* Header band */}
       <section
@@ -59,7 +59,7 @@ export default async function EventDetailPage({ params }: Props) {
           paddingRight: "var(--space-section-x)",
         }}
       >
-        <div style={{ maxWidth: "800px" }}>
+        <div style={{ maxWidth: "800px", width: "100%" }}>
           <p
             style={{
               fontFamily: "var(--font-montserrat)",
@@ -105,8 +105,8 @@ export default async function EventDetailPage({ params }: Props) {
         </div>
       </section>
 
-      {/* Hero image */}
-      {event.heroImage && (
+      {/* Hero image — only when one exists */}
+      {event.heroImage ? (
         <div
           className="relative w-full"
           style={{ height: "clamp(280px, 42vw, 520px)" }}
@@ -119,7 +119,7 @@ export default async function EventDetailPage({ params }: Props) {
             className="object-cover object-center"
           />
         </div>
-      )}
+      ) : null}
 
       {/* Writeup prose */}
       {event.writeup && (
@@ -129,9 +129,10 @@ export default async function EventDetailPage({ params }: Props) {
             paddingBottom: "clamp(48px, 6vw, 80px)",
             paddingLeft: "var(--space-section-x)",
             paddingRight: "var(--space-section-x)",
+            borderTop: event.heroImage ? "none" : "4px solid var(--color-navbar)",
           }}
         >
-          <div style={{ maxWidth: "720px" }}>
+          <div style={{ maxWidth: "720px", width: "100%" }}>
             {event.writeup.split("\n\n").filter(Boolean).map((para, i) => (
               <p
                 key={i}
@@ -142,6 +143,8 @@ export default async function EventDetailPage({ params }: Props) {
                   lineHeight: 1.9,
                   opacity: 0.82,
                   marginBottom: "24px",
+                  overflowWrap: "break-word",
+                  wordBreak: "break-word",
                 }}
               >
                 {para}

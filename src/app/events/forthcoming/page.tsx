@@ -1,26 +1,22 @@
 import type { Metadata } from "next";
-import Image from "next/image";
-import Link from "next/link";
-import { getForthcomingEvents } from "@/sanity/lib/queries";
-
-export const revalidate = 60;
+import { CALENDAR_2026, FORMAT_LABELS } from "@/lib/calendar2026";
 
 export const metadata: Metadata = {
   title: "Forthcoming Events",
   description: "Upcoming programmes, concerts, and Guild meetings from the Guild of Organists of Nigeria.",
 };
 
-function formatDate(iso: string): string {
-  const [year, month, day] = iso.split("-").map(Number);
-  const months = [
-    "January","February","March","April","May","June",
-    "July","August","September","October","November","December",
-  ];
-  return `${months[month - 1]} ${day}, ${year}`;
-}
+export default function ForthcomingEventsPage() {
+  const today = new Date().toISOString().split("T")[0];
+  const currentMonth = new Date().getMonth() + 1; // 1–12
 
-export default async function ForthcomingEventsPage() {
-  const events = await getForthcomingEvents();
+  const upcoming = CALENDAR_2026.filter((entry) => {
+    if (entry.format === "none") return false;
+    // Specific date: show only if it's today or later
+    if (entry.isoDate) return entry.isoDate >= today;
+    // ZTD: show only if the month hasn't passed yet
+    return entry.monthIndex >= currentMonth;
+  });
 
   return (
     <div style={{ backgroundColor: "#FFFFFF" }}>
@@ -87,7 +83,7 @@ export default async function ForthcomingEventsPage() {
           paddingRight: "var(--space-section-x)",
         }}
       >
-        {events.length === 0 ? (
+        {upcoming.length === 0 ? (
           <p
             style={{
               fontFamily: "var(--font-montserrat)",
@@ -100,88 +96,79 @@ export default async function ForthcomingEventsPage() {
             No forthcoming events at this time. Check back soon.
           </p>
         ) : (
-          <div className="flex flex-col" style={{ gap: "0" }}>
-            {events.map((event, i) => (
-              <Link
-                key={event.slug}
-                href={`/events/${event.slug}`}
-                className="group flex flex-col lg:flex-row gap-6 lg:gap-10 items-start hover:opacity-90 transition-opacity"
+          <div className="flex flex-col">
+            {upcoming.map((entry, i) => (
+              <div
+                key={i}
+                className="flex flex-col lg:flex-row lg:items-start"
                 style={{
-                  paddingTop: "clamp(32px, 4vw, 48px)",
-                  paddingBottom: "clamp(32px, 4vw, 48px)",
+                  gap: "clamp(8px, 2vw, 24px)",
+                  paddingTop: "clamp(28px, 4vw, 44px)",
+                  paddingBottom: "clamp(28px, 4vw, 44px)",
                   borderTop: i === 0 ? "1px solid rgba(26,0,0,0.12)" : undefined,
                   borderBottom: "1px solid rgba(26,0,0,0.12)",
-                  textDecoration: "none",
                 }}
               >
-                {/* Thumbnail */}
-                {event.heroImage && (
-                  <div
-                    className="hidden lg:block relative flex-shrink-0 overflow-hidden"
-                    style={{ width: "200px", height: "134px" }}
-                  >
-                    <Image
-                      src={event.heroImage}
-                      alt={event.title}
-                      fill
-                      className="object-cover object-center"
-                      sizes="200px"
-                    />
-                  </div>
-                )}
-
-                {/* Text */}
-                <div className="flex flex-col gap-3">
+                {/* Month + date column */}
+                <div
+                  className="shrink-0"
+                  style={{ minWidth: "180px" }}
+                >
                   <p
                     style={{
                       fontFamily: "var(--font-montserrat)",
                       color: "var(--color-navbar)",
-                      fontSize: "12px",
+                      fontSize: "11px",
                       fontWeight: 700,
-                      letterSpacing: "0.12em",
+                      letterSpacing: "0.16em",
                       textTransform: "uppercase",
-                      opacity: 0.75,
+                      marginBottom: "4px",
                     }}
                   >
-                    {formatDate(event.date)}
+                    {entry.month}
                   </p>
+                  <p
+                    style={{
+                      fontFamily: "var(--font-montserrat)",
+                      color: "var(--color-text-dark)",
+                      fontSize: "15px",
+                      opacity: entry.format === "ztd" ? 0.45 : 0.7,
+                      fontStyle: entry.format === "ztd" ? "italic" : "normal",
+                    }}
+                  >
+                    {entry.format === "ztd" ? "Date to be announced" : entry.date}
+                  </p>
+                </div>
+
+                {/* Activity + format */}
+                <div className="flex flex-col gap-2">
                   <h2
                     className="font-heading"
                     style={{
                       color: "var(--color-text-dark)",
-                      fontSize: "clamp(20px, 2vw, 26px)",
-                      lineHeight: 1.15,
+                      fontSize: "clamp(18px, 2vw, 24px)",
+                      lineHeight: 1.2,
                     }}
                   >
-                    {event.title}
+                    {entry.activity}
                   </h2>
-                  {event.standfirst && (
-                    <p
+                  {entry.format !== "ztd" && (
+                    <span
                       style={{
                         fontFamily: "var(--font-montserrat)",
-                        color: "var(--color-text-dark)",
-                        fontSize: "16px",
-                        lineHeight: 1.75,
-                        opacity: 0.7,
+                        color: "var(--color-navbar)",
+                        fontSize: "12px",
+                        fontWeight: 600,
+                        letterSpacing: "0.1em",
+                        textTransform: "uppercase",
+                        opacity: 0.65,
                       }}
                     >
-                      {event.standfirst}
-                    </p>
+                      {FORMAT_LABELS[entry.format]}
+                    </span>
                   )}
-                  <span
-                    style={{
-                      fontFamily: "var(--font-montserrat)",
-                      color: "var(--color-navbar)",
-                      fontSize: "13px",
-                      fontWeight: 600,
-                      letterSpacing: "0.08em",
-                      marginTop: "4px",
-                    }}
-                  >
-                    View details &rarr;
-                  </span>
                 </div>
-              </Link>
+              </div>
             ))}
           </div>
         )}
