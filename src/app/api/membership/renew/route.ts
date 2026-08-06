@@ -1,6 +1,14 @@
 import { NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 
+function esc(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
@@ -12,24 +20,38 @@ const transporter = nodemailer.createTransport({
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { firstName, lastName, email, phone, membershipNumber, category, photoUrl } = body;
+    const { membershipNumber, fullName, email, phone, photoUrl, paystackReference } = body as {
+      membershipNumber: string;
+      fullName: string;
+      email: string;
+      phone: string;
+      photoUrl?: string;
+      paystackReference: string;
+    };
 
-    if (!firstName || !lastName || !email || !phone || !membershipNumber || !category) {
+    if (!membershipNumber || !fullName || !email || !phone || !paystackReference) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    const categoryLabels: Record<string, string> = {
-      regular: "Regular Membership",
-      fellow: "Fellow (FGON)",
-      associate: "Associate (AGON)",
-      student: "Student Member",
-      affiliate: "Affiliate Member",
-    };
+    // Skip Paystack verification in dev when using a TEST reference
+    const isDev = process.env.NODE_ENV === "development";
+    const isTestRef = paystackReference.startsWith("TEST-");
+
+    if (!isDev || !isTestRef) {
+      const verifyRes = await fetch(
+        `https://api.paystack.co/transaction/verify/${encodeURIComponent(paystackReference)}`,
+        { headers: { Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}` } }
+      );
+      const verifyData = await verifyRes.json();
+      if (!verifyData.status || verifyData.data?.status !== "success") {
+        return NextResponse.json({ error: "Payment could not be verified" }, { status: 400 });
+      }
+    }
 
     const html = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <div style="background-color: #380101; padding: 32px; color: #FFF9EC;">
-          <h1 style="margin: 0; font-size: 24px;">Membership Renewal Request</h1>
+          <h1 style="margin: 0; font-size: 24px;">Membership Renewal</h1>
           <p style="margin: 8px 0 0; opacity: 0.7; font-size: 14px;">Guild of Organists of Nigeria</p>
         </div>
 
@@ -46,29 +68,25 @@ export async function POST(request: Request) {
           <table style="width: 100%; border-collapse: collapse; margin-bottom: 24px;">
             <tr>
               <td style="padding: 8px 0; color: #666; font-size: 14px; width: 180px;">Membership Number</td>
-              <td style="padding: 8px 0; font-size: 14px;"><strong>${membershipNumber}</strong></td>
+              <td style="padding: 8px 0; font-size: 14px;"><strong>${esc(membershipNumber)}</strong></td>
             </tr>
             <tr>
               <td style="padding: 8px 0; color: #666; font-size: 14px;">Name</td>
-              <td style="padding: 8px 0; font-size: 14px;"><strong>${firstName} ${lastName}</strong></td>
-            </tr>
-            <tr>
-              <td style="padding: 8px 0; color: #666; font-size: 14px;">Category</td>
-              <td style="padding: 8px 0; font-size: 14px;">${categoryLabels[category] || category}</td>
+              <td style="padding: 8px 0; font-size: 14px;"><strong>${esc(fullName)}</strong></td>
             </tr>
             <tr>
               <td style="padding: 8px 0; color: #666; font-size: 14px;">Email</td>
-              <td style="padding: 8px 0; font-size: 14px;"><a href="mailto:${email}">${email}</a></td>
+              <td style="padding: 8px 0; font-size: 14px;"><a href="mailto:${esc(email)}">${esc(email)}</a></td>
             </tr>
             <tr>
               <td style="padding: 8px 0; color: #666; font-size: 14px;">Phone</td>
-              <td style="padding: 8px 0; font-size: 14px;"><a href="tel:${phone}">${phone}</a></td>
+              <td style="padding: 8px 0; font-size: 14px;"><a href="tel:${esc(phone)}">${esc(phone)}</a></td>
             </tr>
           </table>
         </div>
 
         <div style="padding: 20px 32px; background-color: #FAFAF8; border: 1px solid #E8E0D0; border-top: none; font-size: 12px; color: #999;">
-          This renewal request was submitted via the GONiG website.
+          Payment reference: ${esc(paystackReference)} &mdash; submitted via the GONiG website.
         </div>
       </div>
     `;
@@ -77,7 +95,7 @@ export async function POST(request: Request) {
       from: `"GONiG Website" <${process.env.GMAIL_USER}>`,
       to: process.env.MEMBERSHIP_RECIPIENT_EMAIL,
       replyTo: email,
-      subject: `Membership Renewal: ${firstName} ${lastName} (${membershipNumber})`,
+      subject: `Membership Renewal: ${fullName} (${membershipNumber})`,
       html,
     });
 

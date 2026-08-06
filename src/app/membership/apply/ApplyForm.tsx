@@ -1,9 +1,26 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { CONTACT_EMAIL } from "@/lib/constants";
+
+declare global {
+  interface Window {
+    PaystackPop: {
+      setup: (options: {
+        key: string;
+        email: string;
+        amount: number;
+        currency: string;
+        ref: string;
+        metadata?: Record<string, unknown>;
+        callback: (response: { reference: string }) => void;
+        onClose: () => void;
+      }) => { openIframe: () => void };
+    };
+  }
+}
 
 /**
  * Membership application form — institutional light treatment.
@@ -94,6 +111,14 @@ export default function ApplyForm() {
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  useEffect(() => {
+    const script = document.createElement("script");
+    script.src = "https://js.paystack.co/v1/inline.js";
+    script.async = true;
+    document.head.appendChild(script);
+    return () => { document.head.removeChild(script); };
+  }, []);
+
   const set =
     (field: keyof FormState) =>
     (
@@ -122,44 +147,71 @@ export default function ApplyForm() {
     setPhotoPreview(URL.createObjectURL(file));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!photo) {
-      setError("Please upload a passport photograph.");
-      return;
-    }
-
+  const submitAfterPayment = async (paystackReference: string) => {
     setSubmitting(true);
     setError("");
-
     try {
       const uploadData = new FormData();
-      uploadData.append("file", photo);
-
+      uploadData.append("file", photo!);
       const uploadRes = await fetch("/api/upload", {
         method: "POST",
+        headers: { "x-upload-secret": process.env.NEXT_PUBLIC_UPLOAD_SECRET ?? "" },
         body: uploadData,
       });
-
       if (!uploadRes.ok) throw new Error("Failed to upload photo");
       const { url: photoUrl } = await uploadRes.json();
 
       const res = await fetch("/api/membership/apply", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, photoUrl }),
+        body: JSON.stringify({ ...form, photoUrl, paystackReference }),
       });
-
       if (!res.ok) throw new Error("Failed to send application");
 
       setSubmitted(true);
       window.scrollTo({ top: 0, behavior: "smooth" });
     } catch {
-      setError("Something went wrong. Please try again or contact us directly.");
+      setError("Payment was received but we could not send your application. Please contact us directly with your payment reference.");
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!photo) {
+      setError("Please upload a passport photograph.");
+      return;
+    }
+    if (!form.category) {
+      setError("Please select a membership category.");
+      return;
+    }
+
+    setError("");
+
+    // Dev bypass: skip payment popup when no public key is configured
+    if (!process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY) {
+      submitAfterPayment(`TEST-${Date.now()}`);
+      return;
+    }
+
+    const ref = `GONIG-REG-${Date.now()}`;
+    const handler = window.PaystackPop.setup({
+      key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY,
+      email: form.email,
+      amount: 100000, // ₦1,000 in kobo
+      currency: "NGN",
+      ref,
+      callback: (response) => {
+        submitAfterPayment(response.reference);
+      },
+      onClose: () => {
+        setError("Payment was not completed. Please try again.");
+      },
+    });
+    handler.openIframe();
   };
 
   return (
@@ -679,23 +731,38 @@ export default function ApplyForm() {
                 </p>
               )}
 
-              <button
-                type="submit"
-                disabled={submitting}
-                className="font-nav flex items-center gap-3 hover:opacity-85 transition-opacity"
-                style={{
-                  backgroundColor: "var(--color-navbar)",
-                  color: "var(--color-nav-text)",
-                  padding: "20px 44px",
-                  fontSize: "13px",
-                  cursor: submitting ? "wait" : "pointer",
-                  border: "none",
-                  width: "fit-content",
-                  opacity: submitting ? 0.6 : 1,
-                }}
-              >
-                {submitting ? "Submitting..." : "Submit Application"}
-              </button>
+              <div className="flex flex-col gap-3">
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="font-nav flex items-center gap-3 hover:opacity-85 transition-opacity"
+                  style={{
+                    backgroundColor: "var(--color-navbar)",
+                    color: "var(--color-nav-text)",
+                    padding: "20px 44px",
+                    fontSize: "13px",
+                    cursor: submitting ? "wait" : "pointer",
+                    border: "none",
+                    width: "fit-content",
+                    opacity: submitting ? 0.6 : 1,
+                  }}
+                >
+                  {submitting ? "Submitting..." : "Pay Registration Fee & Submit"}
+                </button>
+                <p style={{ fontFamily: "var(--font-montserrat)", fontSize: "13px", color: "var(--color-text-dark)", opacity: 0.5 }}>
+                  A registration fee of <strong>₦1,000</strong> is required to submit your application.
+                </p>
+                <div className="flex items-center gap-2" style={{ marginTop: "6px" }}>
+                  <span style={{ fontFamily: "var(--font-montserrat)", fontSize: "12px", color: "var(--color-text-dark)", opacity: 0.4, letterSpacing: "0.02em" }}>
+                    Secured by
+                  </span>
+                  <img
+                    src="/images/paystack-logo.svg"
+                    alt="Paystack"
+                    style={{ height: "20px", width: "auto", opacity: 0.55 }}
+                  />
+                </div>
+              </div>
             </div>
           </form>
         )}
