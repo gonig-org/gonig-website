@@ -17,10 +17,6 @@ const VIDEOS: Video[] = [
     title: "10th Anniversary of the Guild of Organists of Nigeria",
   },
   {
-    id: "Hn9mUwPbp8o",
-    title: "Quarterly Meeting and Workshop: Hymn Leadership and Registration",
-  },
-  {
     id: "k6VmN59kdaA",
     title: "GONiG Live Broadcast",
   },
