@@ -14,9 +14,25 @@ export const SITE_ABBREVIATION = "GONiG";
 export const SITE_DESCRIPTION =
   "GONiG is the registered professional body promoting, preserving, and advancing organ music across Nigeria and among Nigerians in the diaspora.";
 
-/** Canonical production URL, no trailing slash. Falls back to localhost in dev. */
-export const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "http://localhost:3000";
+/**
+ * Canonical production URL, no trailing slash. Falls back to localhost
+ * if unset or malformed (e.g. missing protocol) so a bad env var can
+ * never break the build — see new URL(SITE_URL) in layout.tsx.
+ */
+function resolveSiteUrl(): string {
+  const raw = process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/$/, "");
+  if (!raw) return "http://localhost:3000";
+  try {
+    return new URL(raw).toString().replace(/\/$/, "");
+  } catch {
+    console.warn(
+      `NEXT_PUBLIC_SITE_URL is set to an invalid URL ("${raw}") — falling back to localhost. It must include the protocol, e.g. "https://gonig.org".`
+    );
+    return "http://localhost:3000";
+  }
+}
+
+export const SITE_URL = resolveSiteUrl();
 
 /* ---------- Contact info (used in Footer + legal pages) ---------- */
 
